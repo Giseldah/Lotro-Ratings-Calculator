@@ -73,6 +73,10 @@ var PenChoices = [
 	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
 	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
 	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
+	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
+	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
+	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
+	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
 	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0}
 ];
 
@@ -286,7 +290,7 @@ function MakeSelection(sel) {
 			popup.hidden = false;
 			popup.style.left = (621-Number(popup.offsetWidth)).toString()+'px';
 		} else if (sel == 'graph') {
-			popup.style.left = (Number(document.getElementById('graph').offsetLeft)+74).toString()+'px';
+			popup.style.left = (Number(document.getElementById('graph').offsetLeft)+62).toString()+'px';
 			popup.style.top = (Number(document.getElementById('graph').offsetTop)+67).toString()+'px';
 			popup.hidden = false;
 		}
@@ -357,22 +361,38 @@ function ChangeLevel() {
 		else
 			DisablePercGroup('block');
 	}
-	PenChoices[1].armourpen = CalcStat('T2PenArmour',115);
+	PenChoices[1].armourpen = CalcStat('TPenArmour',PlayerLvl,2);
 	PenChoices[1].armourpenlow = PenChoices[1].armourpen/5;
-	PenChoices[1].bpepen = CalcStat('T2PenBPE',115);
-	PenChoices[1].resistpen = CalcStat('T2PenResist',115);
-	PenChoices[2].armourpen = CalcStat('T2PenArmour',120);
+	PenChoices[1].bpepen = CalcStat('TPenBPE',PlayerLvl,2);
+	PenChoices[1].resistpen = CalcStat('TPenResist',PlayerLvl,2);
+	PenChoices[2].armourpen = CalcStat('TPenArmour',PlayerLvl,3);
 	PenChoices[2].armourpenlow = PenChoices[2].armourpen/5;
-	PenChoices[2].bpepen = CalcStat('T2PenBPE',120);
-	PenChoices[2].resistpen = CalcStat('T2PenResist',120);
-	PenChoices[3].armourpen = CalcStat('TPenArmour',PlayerLvl,2);
+	PenChoices[2].bpepen = CalcStat('TPenBPE',PlayerLvl,3);
+	PenChoices[2].resistpen = CalcStat('TPenResist',PlayerLvl,3);
+	PenChoices[3].armourpen = CalcStat('TPenArmour',54,2);
 	PenChoices[3].armourpenlow = PenChoices[3].armourpen/5;
-	PenChoices[3].bpepen = CalcStat('TPenBPE',PlayerLvl,2);
-	PenChoices[3].resistpen = CalcStat('TPenResist',PlayerLvl,2);
-	PenChoices[4].armourpen = CalcStat('TPenArmour',PlayerLvl,3);
+	PenChoices[3].bpepen = CalcStat('TPenBPE',54,2);
+	PenChoices[3].resistpen = CalcStat('TPenResist',54,2);
+	PenChoices[4].armourpen = CalcStat('TPenArmour',54,3);
 	PenChoices[4].armourpenlow = PenChoices[4].armourpen/5;
-	PenChoices[4].bpepen = CalcStat('TPenBPE',PlayerLvl,3);
-	PenChoices[4].resistpen = CalcStat('TPenResist',PlayerLvl,3);
+	PenChoices[4].bpepen = CalcStat('TPenBPE',54,3);
+	PenChoices[4].resistpen = CalcStat('TPenResist',54,3);
+	PenChoices[5].armourpen = CalcStat('TPenArmour',78,2);
+	PenChoices[5].armourpenlow = PenChoices[5].armourpen/5;
+	PenChoices[5].bpepen = CalcStat('TPenBPE',78,2);
+	PenChoices[5].resistpen = CalcStat('TPenResist',78,2);
+	PenChoices[6].armourpen = CalcStat('TPenArmour',108,2);
+	PenChoices[6].armourpenlow = PenChoices[6].armourpen/5;
+	PenChoices[6].bpepen = CalcStat('TPenBPE',108,2);
+	PenChoices[6].resistpen = CalcStat('TPenResist',108,2);
+	PenChoices[7].armourpen = CalcStat('T2PenArmour',115);
+	PenChoices[7].armourpenlow = PenChoices[7].armourpen/5;
+	PenChoices[7].bpepen = CalcStat('T2PenBPE',115);
+	PenChoices[7].resistpen = CalcStat('T2PenResist',115);
+	PenChoices[8].armourpen = CalcStat('T2PenArmour',120);
+	PenChoices[8].armourpenlow = PenChoices[8].armourpen/5;
+	PenChoices[8].bpepen = CalcStat('T2PenBPE',120);
+	PenChoices[8].resistpen = CalcStat('T2PenResist',120);
 	PenTitles.forEach(SetPenTitle);
 	function SetPenTitle(pt,i) {
 		document.getElementById('pen-sel-'+i).setAttribute('title',
