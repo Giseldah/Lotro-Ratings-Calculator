@@ -651,7 +651,7 @@ input[type="text"]
 
 .pen-sel {
 	list-style-type: none;
-	padding: 2px 6px;
+	padding: 0px 6px;
 	cursor: pointer;
 	text-align: right;
 }
@@ -666,15 +666,15 @@ input[type="text"]
 }
 
 .pen-sel-img {
-	width: 40px;
-	margin-top: 4px;
+	width: 24px;
+	margin-top: 0px;
 }
 
 .pen-sel-shortdesc {
 	display: inline-block;
 	font-family: "Arial";
 	vertical-align: top;
-	margin-top: 15px;
+	margin-top: 3px;
 }
 
 .pen-sel-longdesc {
@@ -693,7 +693,6 @@ input[type="text"]
 }
 
 .graph-sel {
-//	background-color: rgba(255,0,0,0.5);
 	list-style-type: none;
 	padding: 0px 6px;
 	cursor: pointer;
@@ -709,13 +708,11 @@ input[type="text"]
 }
 
 .graph-sel-img {
-//	background-color: rgba(0,255,0,0.5);
 	width: 24px;
 	margin-top: 0px;
 }
 
 .graph-sel-desc {
-//	background-color: rgba(0,0,255,0.5);
 	display: inline-block;
 	font-family: "Arial";
 	vertical-align: top;
