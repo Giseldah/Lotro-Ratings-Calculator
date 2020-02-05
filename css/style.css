@@ -17,6 +17,67 @@ header {
 	height: 80px;
 }
 
+#notes {
+	z-index: 30;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+}
+
+#notes-text {
+	max-width: 800px;
+	max-height: 85vh;
+	width: 80vw;
+	overflow: auto;
+	margin: 10px 10px;
+}
+
+#notes-text h1 {
+	margin: -5px 0px 15px 0px;
+}
+#notes-text p {
+	margin: 10px 0px 15px 0px;
+}
+
+.closebtn {
+	margin-top: 6px;
+	margin-left: 12px;
+	height: 16px;
+	width: 16px;
+	cursor: pointer;
+	background-repeat: no-repeat no-repeat;
+	background-position: center;
+	background-image: url("../images/button_cancel_normal.png");
+}
+
+.closebtn:hover {
+	background-image: url("../images/button_cancel_highlight.png");
+}
+
+.closebtn:active {
+	background-image: url("../images/button_cancel_pressed.png");
+}
+
+.notesbtn {
+	margin-top: 24px;
+	margin-left: 2px;
+	height: 16px;
+	width: 16px;
+	cursor: pointer;
+	background-repeat: no-repeat no-repeat;
+	background-position: center;
+	background-image: url("../images/tutorial_hint.png");
+}
+
+.notesbtn:hover {
+	background-image: url("../images/tutorial_hint_mouseover.png");
+}
+
+.notesbtn:active {
+	background-image: url("../images/tutorial_hint_pressed.png");
+}
+
 .top-div {
 	position: relative;
 	top: -3px;
@@ -157,7 +218,7 @@ header {
 main {
     display: flex;
     flex-wrap: wrap;
-    min-height: calc(100vh - 132px - 104px);
+    min-height: calc(100vh - 131px);
     background-image: url("../images/mainbkg.png");
 }
 
@@ -615,16 +676,13 @@ input[type="text"]
 	margin-bottom: 10px;
 }
 
-#class-sel-list {
-}
-
-.class-sel {
+#class-sel-list li {
 	list-style-type: none;
 	padding: 2px 6px;
 	cursor: pointer;
 }
 
-.class-sel:hover {
+#class-sel-list li:hover {
 	filter: saturate(180%) drop-shadow(1px 1px 11px gold);
     text-shadow:
     -1px -1px 0 gold,  
@@ -633,12 +691,12 @@ input[type="text"]
     1px 1px 0 gold;
 }
 
-.class-sel-img {
+#class-sel-list img {
 	width: 40px;
 	margin-top: 4px;
 }
 
-.class-sel-desc {
+#class-sel-list p {
 	display: inline-block;
 	font-family: "Arial";
 	vertical-align: top;
@@ -649,14 +707,14 @@ input[type="text"]
 	width: 500px;
 }
 
-.pen-sel {
+#pen-sel-list li:not([class="pen-sep"]){
 	list-style-type: none;
 	padding: 0px 6px;
 	cursor: pointer;
 	text-align: right;
 }
 
-.pen-sel:hover {
+#pen-sel-list li:not([class="pen-sep"]):hover {
 	filter: saturate(180%) drop-shadow(1px 1px 11px gold);
     text-shadow:
     -1px -1px 0 gold,  
@@ -665,19 +723,19 @@ input[type="text"]
     1px 1px 0 gold;
 }
 
-.pen-sel-img {
+#pen-sel-list img {
 	width: 24px;
 	margin-top: 0px;
 }
 
-.pen-sel-shortdesc {
+#pen-sel-list li span p:first-child {
 	display: inline-block;
 	font-family: "Arial";
 	vertical-align: top;
 	margin-top: 3px;
 }
 
-.pen-sel-longdesc {
+#pen-sel-list li span p:last-child {
 	font-family: "Times";
 	font-size: 10pt;
 	text-align: right;
@@ -692,13 +750,13 @@ input[type="text"]
 	width: auto;
 }
 
-.graph-sel {
+#graph-sel-list li {
 	list-style-type: none;
 	padding: 0px 6px;
 	cursor: pointer;
 }
 
-.graph-sel:hover {
+#graph-sel-list li:hover {
 	filter: saturate(180%) drop-shadow(1px 1px 11px gold);
     text-shadow:
     -1px -1px 0 gold,  
@@ -707,12 +765,12 @@ input[type="text"]
     1px 1px 0 gold;
 }
 
-.graph-sel-img {
+#graph-sel-list img {
 	width: 24px;
 	margin-top: 0px;
 }
 
-.graph-sel-desc {
+#graph-sel-list p {
 	display: inline-block;
 	font-family: "Arial";
 	vertical-align: top;

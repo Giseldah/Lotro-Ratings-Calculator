@@ -68,32 +68,7 @@ var PenRatings = {
 	tacmit: 'armourpenlow'
 };
 
-var PenChoices = [
-	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
-	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
-	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
-	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
-	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
-	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
-	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
-	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0},
-	{armourpen: 0, armourpenlow: 0, bpepen: 0, resistpen: 0}
-];
-
-var PenTitles = [];
-
-var PlayerClasses = [
-	'beorning',
-	'burglar',
-	'captain',
-	'champion',
-	'guardian',
-	'hunter',
-	'loremaster',
-	'minstrel',
-	'runekeeper',
-	'warden'
-];
+var Penetrations;
 
 var ArmourTypes = [
 	'',
@@ -106,27 +81,27 @@ var DiffColorNeg = 'rgba(255, 170, 170, 0.3)';
 var DiffColorZero = '';
 var DiffColorPos = 'rgba(170, 170, 255, 0.35)';
 
-var LevelCap = 999;
-var PlayerLvl = 130;
-var PlayerClass = 0;
-var PenChoice = 0;
-var ArmourType = 3;
-var CanBlock = true;
-var GraphPerc = 0;
+var LevelCap;
+var PlayerLvl;
+var PlayerClass;
+var PenIndex;
+var ArmourType;
+var CanBlock;
+var GraphPerc;
 
 window.onload = function() {
-	PenChoices.forEach(InitPenTitle);
-	function InitPenTitle(pc,i) {
-		PenTitles.push(document.getElementById('pen-sel-'+i).getAttribute('title'));
-	}
+	PlayerClass = document.getElementById('class-sel-list').firstElementChild.getAttribute('data-classname');
 	LevelCap = CalcStat('LevelCap',0);
 	PlayerLvl = LevelCap;
+	InitPenetrations();
+	PenIndex = 0;
+	GraphPerc = document.getElementById('graph-sel-list').firstElementChild.getAttribute('data-percname');
 	ChangeClass();
 	ChangeLevel();
 	ChangePen();
 	PercTags.forEach(InitPerc);
 	function InitPerc(ps) {
-		if (typeof PercGroups[ps] !== 'undefined') {
+		if (typeof PercGroups[ps] !== 'undefined' && ps != 'block') {
 			ProcessUnlockedBtn(document.getElementById(ps+'unlockedbtn'));
 		}
 		document.getElementById(ps+'currrat').value = '0';
@@ -138,6 +113,99 @@ window.onload = function() {
 	}
 	InitGraph();
 	document.getElementById('cs-version').innerHTML = 'v'+CalcStat('-Version',0);
+}
+
+function InitPenetrations() {
+	Penetrations = [];
+	var lis = document.getElementById('pen-sel-list').getElementsByTagName('li');
+	var calclvl;
+	var penname, pentype, penlevel, pentitle, penarmour, penarmourlow, penbpe, penresist;
+	var i;
+	for (i = 0; i < lis.length; i++) {
+		if (lis[i].hasAttribute('data-penname')) {
+			penname = lis[i].getAttribute('data-penname');
+			pentype = lis[i].getAttribute('data-pentype');
+			penlevel = lis[i].getAttribute('data-penlevel');
+			pentitle = lis[i].getAttribute('data-pentitle');
+			penarmour = 0;
+			penarmourlow = 0;
+			penbpe = 0;
+			penresist = 0;
+			if (penlevel != null && penlevel != 'onlvl') {
+				calclvl = Number(penlevel);
+				switch(pentype) {
+					case 'hidden2':
+						penarmour = CalcStat('TPenArmour',calclvl,2);
+						penarmourlow = penarmour;
+						penbpe = CalcStat('TPenBPE',calclvl,2);
+						penresist = CalcStat('TPenResist',calclvl,2);
+						break;
+					case 'hidden3':
+						penarmour = CalcStat('TPenArmour',calclvl,3);
+						penarmourlow = penarmour;
+						penbpe = CalcStat('TPenBPE',calclvl,3);
+						penresist = CalcStat('TPenResist',calclvl,3);
+						break;
+					case 'enhiii':
+						penarmour = CalcStat('T2PenArmour',calclvl);
+						penarmourlow = penarmour;
+						penbpe = CalcStat('T2PenBPE',calclvl);
+						penresist = CalcStat('T2PenResist',calclvl);
+				}
+			}
+			if (penlevel != 'onlvl') 
+				lis[i].setAttribute('title',pentitle.replace(/#bpepen/g,Math.round(penbpe+DblCalcDev).toString()).replace(/#resistpen/g,Math.round(penresist+DblCalcDev).toString()).replace(/#armourpen/g,Math.round(penarmour+DblCalcDev).toString()));
+			Penetrations.push({name: penname, type: pentype, level: penlevel, title: pentitle, armourpen: penarmour, armourpenlow: penarmourlow, bpepen: penbpe, resistpen: penresist});
+		}
+	}
+}
+
+function UpdatePenetrations() {
+	var lis = document.getElementById('pen-sel-list').getElementsByTagName('li');
+	var calclvl;
+	var penname, pentype, penlevel, pentitle, penarmour, penarmourlow, penbpe, penresist;
+	var pi = 0;
+	var i;
+	for (i = 0; i < lis.length; i++) {
+		if (lis[i].hasAttribute('data-penname')) {
+			penname = lis[i].getAttribute('data-penname');
+			pentype = lis[i].getAttribute('data-pentype');
+			penlevel = lis[i].getAttribute('data-penlevel');
+			pentitle = lis[i].getAttribute('data-pentitle');
+			penarmour = 0;
+			penarmourlow = 0;
+			penbpe = 0;
+			penresist = 0;
+			if (penlevel == 'onlvl') {
+				calclvl = PlayerLvl;
+				switch(pentype) {
+					case 'hidden2':
+						penarmour = CalcStat('TPenArmour',calclvl,2);
+						penarmourlow = penarmour;
+						penbpe = CalcStat('TPenBPE',calclvl,2);
+						penresist = CalcStat('TPenResist',calclvl,2);
+						break;
+					case 'hidden3':
+						penarmour = CalcStat('TPenArmour',calclvl,3);
+						penarmourlow = penarmour;
+						penbpe = CalcStat('TPenBPE',calclvl,3);
+						penresist = CalcStat('TPenResist',calclvl,3);
+						break;
+					case 'enhiii':
+						penarmour = CalcStat('T2PenArmour',calclvl);
+						penarmourlow = penarmour;
+						penbpe = CalcStat('T2PenBPE',calclvl);
+						penresist = CalcStat('T2PenResist',calclvl);
+				}
+				lis[i].setAttribute('title',pentitle.replace(/#bpepen/g,Math.round(penbpe+DblCalcDev).toString()).replace(/#resistpen/g,Math.round(penresist+DblCalcDev).toString()).replace(/#armourpen/g,Math.round(penarmour+DblCalcDev).toString()));
+				Penetrations[pi].armourpen = penarmour;
+				Penetrations[pi].armourpenlow = penarmourlow;
+				Penetrations[pi].bpepen = penbpe;
+				Penetrations[pi].resistpen = penresist;
+			}
+			pi++;
+		}
+	}
 }
 
 function ProcessLockedBtn(lockedbtn) {
@@ -200,11 +268,8 @@ function UpdateCurrPerc(ps) {
 		var currrat = document.getElementById(ps+'currrat');
 		var csps = ReplaceArmourType(ps);
 		var pb = CalcStat(csps+'PBonus',PlayerLvl);
-		var pen = 0;
 		var pr = PenRatings[ps];
-		if (typeof pr !== 'undefined') {
-			pen = PenChoices[PenChoice][pr];
-		}
+		var pen = ((typeof pr === 'undefined') ? 0 : Penetrations[PenIndex][pr]);
 		var p = (CalcStat(csps+'PRatP',PlayerLvl,Number(currrat.value)+pen)+0.0002+pb+DblCalcDev).toFixed(1).toString();
 		currperc.innerHTML = p+((p.includes('.')) ? '%' : '.0%');
 	}
@@ -238,11 +303,8 @@ function UpdateTargRat(ps) {
 		var targperc = document.getElementById(ps+'targperc');
 		var csps = ReplaceArmourType(ps);
 		var pb = CalcStat(csps+'PBonus',PlayerLvl);
-		var pen = 0;
 		var pr = PenRatings[ps];
-		if (typeof pr !== 'undefined') {
-			pen = PenChoices[PenChoice][pr];
-		}
+		var pen = ((typeof pr === 'undefined') ? 0 : Penetrations[PenIndex][pr]);
 		var r = Math.ceil(CalcStat(csps+'PPRat',PlayerLvl,Number(targperc.value.replace('%',''))-pb)-pen-DblCalcDev);
 		targrat.innerHTML = r;
 	}
@@ -300,48 +362,64 @@ function MakeSelection(sel) {
 	}
 }
 
-function SelectClass(el) {
-	PlayerClass = Number(el.id.replace('class-sel-',''));
+function CloseSelection() {
+	document.getElementById('popup').hidden = true;
+	document.getElementById('pu-sel-class').hidden = true;
+	document.getElementById('pu-sel-level').hidden = true;
+	document.getElementById('pu-sel-pen').hidden = true;
+	document.getElementById('pu-sel-graph').hidden = true;
+}
+
+function SelectClass(classname) {
+	PlayerClass = classname;
 	document.getElementById('popup').hidden = true;
 	document.getElementById('pu-sel-class').hidden = true;
 	ChangeClass();
 	PercTags.forEach(UpdatePerc);
 }
 
-function SelectLevel(el) {
-	PlayerLvl = Number(el.value);
+function SelectLevel(value) {
+	PlayerLvl = Number(value);
 	document.getElementById('popup').hidden = true;
 	document.getElementById('pu-sel-level').hidden = true;
 	ChangeLevel();
 	PercTags.forEach(UpdatePerc);
 }
 
-function LvlRangeUpdate(el) {
+function LvlRangeUpdate(value) {
 	if (!document.getElementById('popup').hidden) 
-		document.getElementById('level-number').innerHTML = el.value;
+		document.getElementById('level-number').innerHTML = value;
 }
 
-function SelectPen(el) {
-	PenChoice = Number(el.id.replace('pen-sel-',''));
+function SelectPen(penname) {
+	PenIndex = Penetrations.findIndex(function(pen){return (pen.name == penname);});
 	document.getElementById('popup').hidden = true;
 	document.getElementById('pu-sel-pen').hidden = true;
 	ChangePen();
 	PercTags.forEach(UpdatePerc);
 }
 
-function SelectGraph(el) {
-	GraphPerc = Number(el.id.replace('graph-sel-',''));
+function SelectGraph(percname) {
+	GraphPerc = percname;
 	document.getElementById('popup').hidden = true;
 	document.getElementById('pu-sel-graph').hidden = true;
 	ChangeGraph();
 }
 
 function ChangeClass() {
-	document.getElementById('class-symb').setAttribute('src',document.getElementById('class-sel-img-'+PlayerClass).getAttribute('src'));
-	document.getElementById('class-name').innerHTML = document.getElementById('class-sel-desc-'+PlayerClass).innerHTML;
-	ArmourType = CalcStat(PlayerClasses[PlayerClass]+'CDArmourType',PlayerLvl);
+	var lis = document.getElementById('class-sel-list').getElementsByTagName('li');
+	var i;
+	for (i = 0; i < lis.length; i++) {
+		if (lis[i].getAttribute('data-classname') == PlayerClass) {
+			var span = lis[i].firstElementChild;
+			document.getElementById('class-symb').setAttribute('src',span.getElementsByTagName('img')[0].getAttribute('src'));
+			document.getElementById('class-name').innerHTML = span.getElementsByTagName('p')[0].innerHTML;
+			break;
+		}
+	} 
+	ArmourType = CalcStat(PlayerClass+'CDArmourType',PlayerLvl);
 	var OldCanBlock = CanBlock;
-	CanBlock = (CalcStat(PlayerClasses[PlayerClass]+'CDCanBlock',PlayerLvl) > 0);
+	CanBlock = (CalcStat(PlayerClass+'CDCanBlock',PlayerLvl) > 0);
 	if (OldCanBlock != CanBlock) {
 		if (CanBlock) 
 			EnablePercGroup('block');
@@ -352,62 +430,42 @@ function ChangeClass() {
 
 function ChangeLevel() {
 	document.getElementById('level-number').innerHTML = PlayerLvl.toString();
-	ArmourType = CalcStat(PlayerClasses[PlayerClass]+'CDArmourType',PlayerLvl);
+	ArmourType = CalcStat(PlayerClass+'CDArmourType',PlayerLvl);
 	var OldCanBlock = CanBlock;
-	CanBlock = (CalcStat(PlayerClasses[PlayerClass]+'CDCanBlock',PlayerLvl) > 0);
+	CanBlock = (CalcStat(PlayerClass+'CDCanBlock',PlayerLvl) > 0);
 	if (OldCanBlock != CanBlock) {
 		if (CanBlock) 
 			EnablePercGroup('block');
 		else
 			DisablePercGroup('block');
 	}
-	PenChoices[1].armourpen = CalcStat('TPenArmour',PlayerLvl,2);
-	PenChoices[1].armourpenlow = PenChoices[1].armourpen; ///5;
-	PenChoices[1].bpepen = CalcStat('TPenBPE',PlayerLvl,2);
-	PenChoices[1].resistpen = CalcStat('TPenResist',PlayerLvl,2);
-	PenChoices[2].armourpen = CalcStat('TPenArmour',PlayerLvl,3);
-	PenChoices[2].armourpenlow = PenChoices[2].armourpen; ///5;
-	PenChoices[2].bpepen = CalcStat('TPenBPE',PlayerLvl,3);
-	PenChoices[2].resistpen = CalcStat('TPenResist',PlayerLvl,3);
-	PenChoices[3].armourpen = CalcStat('TPenArmour',54,2);
-	PenChoices[3].armourpenlow = PenChoices[3].armourpen; ///5;
-	PenChoices[3].bpepen = CalcStat('TPenBPE',54,2);
-	PenChoices[3].resistpen = CalcStat('TPenResist',54,2);
-	PenChoices[4].armourpen = CalcStat('TPenArmour',54,3);
-	PenChoices[4].armourpenlow = PenChoices[4].armourpen; ///5;
-	PenChoices[4].bpepen = CalcStat('TPenBPE',54,3);
-	PenChoices[4].resistpen = CalcStat('TPenResist',54,3);
-	PenChoices[5].armourpen = CalcStat('TPenArmour',78,2);
-	PenChoices[5].armourpenlow = PenChoices[5].armourpen; ///5;
-	PenChoices[5].bpepen = CalcStat('TPenBPE',78,2);
-	PenChoices[5].resistpen = CalcStat('TPenResist',78,2);
-	PenChoices[6].armourpen = CalcStat('TPenArmour',108,2);
-	PenChoices[6].armourpenlow = PenChoices[6].armourpen; ///5;
-	PenChoices[6].bpepen = CalcStat('TPenBPE',108,2);
-	PenChoices[6].resistpen = CalcStat('TPenResist',108,2);
-	PenChoices[7].armourpen = CalcStat('T2PenArmour',115);
-	PenChoices[7].armourpenlow = PenChoices[7].armourpen; ///5;
-	PenChoices[7].bpepen = CalcStat('T2PenBPE',115);
-	PenChoices[7].resistpen = CalcStat('T2PenResist',115);
-	PenChoices[8].armourpen = CalcStat('T2PenArmour',120);
-	PenChoices[8].armourpenlow = PenChoices[8].armourpen; ///5;
-	PenChoices[8].bpepen = CalcStat('T2PenBPE',120);
-	PenChoices[8].resistpen = CalcStat('T2PenResist',120);
-	PenTitles.forEach(SetPenTitle);
-	function SetPenTitle(pt,i) {
-		document.getElementById('pen-sel-'+i).setAttribute('title',
-			pt.replace(/#bpepen/g,Math.round(PenChoices[i].bpepen+DblCalcDev).toString()).replace(/#resistpen/g,Math.round(PenChoices[i].resistpen+DblCalcDev).toString()).replace(/#armourpen/g,Math.round(PenChoices[i].armourpen+DblCalcDev).toString()));
-	}
+	UpdatePenetrations();
 }
 
 function ChangePen() {
-	document.getElementById('pen-desc').innerHTML = document.getElementById('pen-sel-shortdesc-'+PenChoice).innerHTML;
-	document.getElementById('pen-slot').setAttribute('src',document.getElementById('pen-sel-img-'+PenChoice).getAttribute('src'));
+	var lis = document.getElementById('pen-sel-list').getElementsByTagName('li');
+	var i;
+	for (i = 0; i < lis.length; i++) {
+		if (lis[i].getAttribute('data-penname') == Penetrations[PenIndex].name) {
+			var span = lis[i].firstElementChild;
+			document.getElementById('pen-desc').innerHTML = span.getElementsByTagName('p')[0].innerHTML;
+			document.getElementById('pen-slot').setAttribute('src',span.getElementsByTagName('img')[0].getAttribute('src'));
+			break;
+		}
+	} 
 }
 
 function ChangeGraph() {
-	document.getElementById('perc-deco').setAttribute('src',document.getElementById('graph-sel-img-'+GraphPerc).getAttribute('src'));
-	document.getElementById('perc-name').innerHTML = document.getElementById('graph-sel-desc-'+GraphPerc).innerHTML;
+	var lis = document.getElementById('graph-sel-list').getElementsByTagName('li');
+	var i;
+	for (i = 0; i < lis.length; i++) {
+		if (lis[i].getAttribute('data-percname') == GraphPerc) {
+			var span = lis[i].firstElementChild;
+			document.getElementById('perc-deco').setAttribute('src',span.getElementsByTagName('img')[0].getAttribute('src'));
+			document.getElementById('perc-name').innerHTML = span.getElementsByTagName('p')[0].innerHTML;
+			break;
+		}
+	} 
 	graphconfig.options.title.text = document.getElementById('perc-name').innerHTML;
 	UpdateGraphData();
 	window.myLine.update();
@@ -468,28 +526,24 @@ var graphconfig = {
 	type: 'line',
 	data: {
 		datasets: [{
-			label: 'Remaining',
+			label: ' ',
 			borderColor: 'grey',
 			borderWidth: 3,
-			backgroundColor: 'rgba(0, 0, 0, 0)',
 			fill: false
 		}, {
-			label: 'Under Target',
+			label: ' ',
 			borderColor: 'red',
 			borderWidth: 3,
-			backgroundColor: 'rgba(0, 0, 0, 0)',
 			fill: false
 		}, {
-			label: 'Above Target',
+			label: ' ',
 			borderColor: 'blue',
 			borderWidth: 5,
-			backgroundColor: 'rgba(0, 0, 0, 0)',
 			fill: false
 		}, {
-			label: 'Current',
+			label: ' ',
 			borderColor: 'green',
 			borderWidth: 5,
-			backgroundColor: 'rgba(0, 0, 0, 0)',
 			fill: false
 		}]
 	},
@@ -498,7 +552,7 @@ var graphconfig = {
 		maintainAspectRatio: false,
 		title: {
 			display: true,
-			text: 'Critical Hit Chance',
+			text: ' ',
 			fontSize: 18
 		},
 		tooltips: {
@@ -517,7 +571,7 @@ var graphconfig = {
 				display: true,
 				scaleLabel: {
 					display: true,
-					labelString: 'R'
+					labelString: ' '
 				},
 				ticks: {
 					Min: 0,
@@ -528,7 +582,7 @@ var graphconfig = {
 				display: true,
 				scaleLabel: {
 					display: true,
-					labelString: '%'
+					labelString: ' '
 				},
 				ticks: {
 					beginAtZero: true
@@ -538,13 +592,24 @@ var graphconfig = {
 	}
 };
 
-var GraphPoints = 122;
-
 function InitGraph() {
-	
-	document.getElementById('perc-deco').setAttribute('src',document.getElementById('graph-sel-img-'+GraphPerc).getAttribute('src'));
-	document.getElementById('perc-name').innerHTML = document.getElementById('graph-sel-desc-'+GraphPerc).innerHTML;
-	graphconfig.options.title.text = document.getElementById('perc-name').innerHTML;
+	var lis = document.getElementById('graph-sel-list').getElementsByTagName('li');
+	var i;
+	for (i = 0; i < lis.length; i++) {
+		if (lis[i].getAttribute('data-percname') == GraphPerc) {
+			var span = lis[i].firstElementChild;
+			document.getElementById('perc-deco').setAttribute('src',span.getElementsByTagName('img')[0].getAttribute('src'));
+			document.getElementById('perc-name').innerHTML = span.getElementsByTagName('p')[0].innerHTML;
+			break;
+		}
+	}
+	var gc = document.getElementById('graphcontainer');
+	graphconfig.data.datasets[0].label = gc.getAttribute('data-lblremaining');
+	graphconfig.data.datasets[1].label = gc.getAttribute('data-lblundertarget');
+	graphconfig.data.datasets[2].label = gc.getAttribute('data-lblabovetarget');
+	graphconfig.data.datasets[3].label = gc.getAttribute('data-lblcurrent');
+	graphconfig.options.scales.xAxes[0].scaleLabel.labelString = gc.getAttribute('data-lblrating');
+	graphconfig.options.scales.yAxes[0].scaleLabel.labelString = gc.getAttribute('data-lblperc');
 	UpdateGraphData();
 	Chart.defaults.global.defaultFontSize = 14;
 	Chart.defaults.global.defaultFontColor = 'black';
@@ -552,49 +617,54 @@ function InitGraph() {
 }
 
 function UpdateGraph(ps) {
-	
-	if (ps == PercTags[GraphPerc]) {
+	if (ps == GraphPerc) {
 		UpdateGraphData();
 		window.myLine.update();
 	}
 }
 
+var GraphPoints = 122;
+
 function UpdateGraphData() {
-	
-	var ps = PercTags[GraphPerc];
-	
+	var ps = GraphPerc;
 	var PD_LinkCurRat = Number(document.getElementById(ps+'currrat').value);
 	var PD_LinkTgtRat = Number(document.getElementById(ps+'targrat').innerHTML);
-
 	var csps = ReplaceArmourType(ps);
 	var PD_Poff = CalcStat(csps+'PBonus',PlayerLvl);
-	var PD_Pen = 0;
 	var pr = PenRatings[ps];
-	if (typeof pr !== 'undefined') {
-		PD_Pen = PenChoices[PenChoice][pr];
-	}
+	var PD_Pen = ((typeof pr === 'undefined') ? 0 : Penetrations[PenIndex][pr]);
 	var PD_RcapTotal = Math.ceil(CalcStat(csps+'PRatPCapR',PlayerLvl)-PD_Pen-DblCalcDev);
+	var PD_PcapTotal = Math.ceil(CalcStat(csps+'PRatPCap',PlayerLvl)+PD_Poff-DblCalcDev);
+
+	graphconfig.options.title.text = document.getElementById('perc-name').innerHTML+document.getElementById('graphcontainer').getAttribute('data-lblcapinfo').replace('#capperc',PD_PcapTotal).replace('#caprat',PD_RcapTotal);
 	
-	var Rmax, Ticks;
-//	var Rmax = Math.ceil(RmaxRaw,Math.min(0,-Math.floor(Math.log10(RmaxRaw)-1)));
+	var Rmax, maxTicksLimit, Rstep;
 	if (PD_LinkCurRat <= PD_RcapTotal) {
 		Rmax = PD_RcapTotal*1.1;
-		Ticks =  12;
+		maxTicksLimit = 12;
 	} else {
-		var Rdiff = (PD_LinkCurRat-PD_RcapTotal);
-		
-		Rmax = PD_LinkCurRat*1.1;
+		maxTicksLimit = 12;
+		Rmax = ((PD_LinkCurRat*1.05)/(maxTicksLimit-1)).toPrecision(2)*(maxTicksLimit-1);
 	}
-	
-	var Rstep = Rmax/(GraphPoints-1);
-	var Rhalfstep = Rstep/2;
+	Rstep = Rmax/(GraphPoints-1);
 
-	var Interval1 = PD_LinkCurRat-Rhalfstep;
-	var Interval2 = PD_LinkCurRat+Rhalfstep;
-	var Interval3 = PD_LinkTgtRat-Rhalfstep;
-	var Interval4 = PD_LinkTgtRat+Rhalfstep;
-	var Interval5 = Math.max(Interval1,Interval3);
-	var Interval6 = Math.min(Interval2,Interval4);
+	var Interval0, Interval1, Interval2, Interval3, GraphType;
+	Interval0 = 0;
+	if (PD_LinkCurRat > PD_LinkTgtRat) {
+		Interval1 = Math.round(PD_LinkTgtRat/Rstep+DblCalcDev);
+		Interval2 = Math.round(PD_LinkCurRat/Rstep+DblCalcDev);
+		Interval3 = GraphPoints-1;
+		GraphType = 1;
+	} else if (PD_LinkCurRat < PD_LinkTgtRat) {
+		Interval1 = Math.round(PD_LinkCurRat/Rstep+DblCalcDev);
+		Interval2 = Math.round(PD_LinkTgtRat/Rstep+DblCalcDev);
+		Interval3 = GraphPoints-1;
+		GraphType = 2;
+	} else {
+		Interval1 = Math.round(PD_LinkCurRat/Rstep+DblCalcDev);
+		Interval2 = GraphPoints-1;
+		GraphType = 3;
+	}
 	
 	var	GDRating = [];
 	var GDRemain = [];
@@ -604,15 +674,29 @@ function UpdateGraphData() {
 
 	var r;
 	var p;
-	
 	for (var i = 0; i < GraphPoints; i++) {
-		r = Math.round(i*Rstep);
+		r = RoundDbl(i*Rstep,1);
 		GDRating.push(r);
 		p = RoundDbl(PD_Poff+CalcStat(csps+'PRatP',PlayerLvl,r+PD_Pen),5);
-		GDRemain.push(((r > Interval5) ? p : NaN));
-		GDUnder.push((((Interval1 < r && r <= Interval4) && !(r > Interval5 && r <= Interval6)) ? p : NaN));
-		GDAbove.push((((Interval3 < r && r <= Interval2) && !(r > Interval5 && r <= Interval6)) ? p : NaN));
-		GDCurrent.push(((r <= Interval6) ? p : NaN));
+		switch(GraphType) {
+			case 1:
+				GDCurrent.push(((Interval0 <= i && i <= Interval1) ? p : NaN));
+				GDAbove.push(((Interval1 <= i && i <= Interval2) ? p : NaN));
+				GDRemain.push(((Interval2 <= i && i <= Interval3) ? p : NaN));
+				GDUnder.push(NaN);
+				break;
+			case 2:
+				GDCurrent.push(((Interval0 <= i && i <= Interval1) ? p : NaN));
+				GDUnder.push(((Interval1 <= i && i <= Interval2) ? p : NaN));
+				GDRemain.push(((Interval2 <= i && i <= Interval3) ? p : NaN));
+				GDAbove.push(NaN);
+				break;
+			case 3:
+				GDCurrent.push(((Interval0 <= i && i <= Interval1) ? p : NaN));
+				GDRemain.push(((Interval1 <= i && i <= Interval2) ? p : NaN));
+				GDUnder.push(NaN);
+				GDAbove.push(NaN);
+		}
 	}
 	
 	graphconfig.data.labels = GDRating;
@@ -620,4 +704,13 @@ function UpdateGraphData() {
 	graphconfig.data.datasets[1].data = GDUnder;
 	graphconfig.data.datasets[2].data = GDAbove;
 	graphconfig.data.datasets[3].data = GDCurrent;
+	graphconfig.options.scales.xAxes[0].ticks.maxTicksLimit = maxTicksLimit;
+}
+
+function ShowNotes() {
+	document.getElementById('notes').hidden = false;
+}
+
+function CloseNotes() {
+	document.getElementById('notes').hidden = true;
 }

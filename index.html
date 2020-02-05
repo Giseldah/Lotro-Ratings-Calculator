@@ -12,6 +12,61 @@
 	</div>
 </header>
 <main>
+	<div id="notes" hidden>
+		<div class="popupframe">
+			<div class="pu-topl"></div>
+			<div class="pu-topm"></div>
+			<div class="pu-topr"><div class="closebtn" onclick="CloseNotes()"></div></div>
+			<div class="pu-midl"></div>
+			<div class="pu-midm">
+				<div id="notes-text">
+<h1>Welcome to the LOTRO Ratings Calculator!</h1>
+<p>This tool can be used in multiple ways and it works on any level:<p>
+<h2>Basic functionality:</h2>
+<p>1) calculate rating to percentage: number columns 1 & 2. enter rating in 1 and percentage shows in 2.<br />
+2) calculate percentage to rating: number columns 3 & 4. enter percentage in 3 and rating shows in 4.<br />
+3) shows a graph of the rating to percentage formula for visual information with cap percentage and cap rating.</p>
+<h2>Planning:</h2>
+<p>If you see the entered rating in number column 1 as your 'current' rating and the percentage in column 3 as your 'target' percentage (with target rating in column 4) then column 5 shows the rating difference which can be negative (red, below target) or positive (blue, above target).<br />
+In the graph the current amount shows as green color, the (negative) amount under target as red, the (positive) amount above target as blue and any remainder to cap as grey.</p>
+<h2>Advanced, simulation:</h2>
+<p>Here it gets tricky. The basic information like in the character window in-game provides only information 'on-level' and it doesn't show rating penetrations from mobs (an effect they have in all t2 and higher instance/raid tiers and also in Anvil T1).<br />
+If you want to calculate rating and percentages for real situations / fights then you have to take into account the level differences and penetration values. Sadly, not much information is given about this from official sources.</p>
+<p>For level we can distinquise:<br />
+- character level<br />
+- mob level<br />
+- calculation level</p>
+<p>Calculation level depends on the percentage stat. Not much is known about this. Is it equal to character level or the mob's level? I only know for sure that for mitigation percentage stats this is the highest of those two. For mitigations this means that:<br />
+1) if your character level is lower than the mob's level then you need to set calculation level (menu bar: shield) to the mobs level<br />
+2) if your character level is equal or higher than the mob's level then you can keep your character's level for calculation level.<p>
+<p>Rating penetration effects are always calculated from the mob's level. In regarding to the penetrations menu - the calculator doesn't provide a means to set mob level directly, but the menu gives you some options:<br />
+1) no penetrations: Landscape, T1.<br />
+2) on-level fights, so character level = mob level = calculation level: Tier 2 or Tier 3(and higher).<br />
+3) non scalable raids: Rift, ToO, Throne, Abyss, Anvil. for these the mob's level for penetrations is shown in the menu (like 108 for Throne). This mob level is based on the highest boss in those raids.</p>
+<h3>So for ToO T2 Saruman lvl 78 as example:</h3>
+<p>1) decide which percentage stat you want to calculate with.<br />
+2) if it's mitigations then: are you higher in level than lvl78? -> use your own level. are you lower in level? -> use lvl78 for the level setting.
+3) just use your character level for the other percentage stats..(?)<br />
+4) for penetration you need mob level 78, so you choose the ToO option from the penetation menu.</p>
+<h3>Example: Glimmerdeep T4 lvl 120 mobs:</h3>
+<p>1) decide which percentage stat you want to calculate with.<br />
+2) if it's mitigations then: are you higher in level than lvl120? -> use your own level. are you lower in level? -> use lvl120 for the level setting.<br />
+3) just use your character level for the other percentage stats..(?)<br />
+4) for penetrations, the only option is to choose on-level Tier 3. so you can't calculate those correctly if you're not 120 in this situation.</p>
+<h2>Note:</h2>
+<p>Rating penetrations affect the cap ratings, because you need to compensate for them to reach the same percentages.<br />
+Calculations work like:<br />
+1) rating to percentage - penetration value is added (negative value) to current rating and from there a percentage is calculated.<br />
+2) percentage to rating - rating is calculated from percentage and from this rating the penetration value is substracted (results in addition).<br />
+3) cap information - cap rating information shows with penetration rating compensation.</p>
+				</div>
+			</div>
+			<div class="pu-midr"></div>
+			<div class="pu-botl"></div>
+			<div class="pu-botm"></div>
+			<div class="pu-botr"></div>
+		</div>
+	</div>
     <div id="calc">
 		<div class="top-div"></div>
 		<div class="nav-bar">
@@ -41,16 +96,16 @@
 			<div class="gridframe">
 				<div class="gf-topl"></div>
 				<div class="gf-topm"></div>
-				<div class="gf-topr"></div>
+				<div class="gf-topr"><div class="notesbtn" onclick="ShowNotes()"></div></div>
 				<div class="gf-midl"></div>
 				<div class="gf-midm">
 					<form id="calcform">
 						<p id="perclabelhdr" class="colhdr hdrrow"></p>
-						<p id="currrathdr" class="colhdr hdrrow" title="Enter a rating in this column and the percentage will be calculated.">enter #</p>
+						<p id="currrathdr" class="colhdr hdrrow" title="Enter (current) rating in this column and the percentage will be calculated.">enter #</p>
 						<p id="currperchdr" class="colhdr hdrrow" title="The percentage calculated from the entered rating in the column to the left.">&rarr; %</p>
-						<p id="targperchdr" class="colhdr hdrrow" title="Enter a percentage in this column and the (required) rating will be calculated.">enter %</p>
-						<p id="targrathdr" class="colhdr hdrrow" title="The (required) rating calculated from the entered percentage in the column to the left.">&rarr; #</p>
-						<p id="ratdiffhdr" class="colhdr hdrrow" title="The difference between entered rating and calculated (required) rating.">diff. #</p>
+						<p id="targperchdr" class="colhdr hdrrow" title="Enter a (target) percentage in this column and the required rating will be calculated.">enter %</p>
+						<p id="targrathdr" class="colhdr hdrrow" title="The rating calculated from the entered percentage in the column to the left.">&rarr; #</p>
+						<p id="ratdiffhdr" class="colhdr hdrrow" title="The difference between entered (current) rating and calculated (target) rating.">diff. #</p>
 						<p id="offencehdr" class="stathdr">Offence</p>
 						<p id="offencesep" class="sep"></p>
 						<label id="crithitlbl" class="perclabel crithitrow" for="crithitcurrrat">Critical Hit</label>
@@ -217,7 +272,7 @@
 		<div class="nav-bar">
 			<ul class="actions">
 				<li class="selection">
-					<img id="perc-deco" src="./images/percdeco1.png" onclick="MakeSelection('graph')">
+					<img id="perc-deco" src="./images/percdeco1.png" onclick="MakeSelection('graph')" title="Select percentage graph.">
 					<p id="perc-name" onclick="MakeSelection('graph')">Critical Hit Chance</p>
 				</li>
 			</ul>
@@ -230,7 +285,7 @@
 				<div class="gf-topr"></div>
 				<div class="gf-midl"></div>
 				<div class="gf-midm">
-					<div id="graphcontainer">
+					<div id="graphcontainer" data-lblcapinfo=" - Cap: #capperc% (#caprat)" data-lblremaining="Remaining" data-lblundertarget="Under Target" data-lblabovetarget="Above Target" data-lblcurrent="Current" data-lblperc="%" data-lblrating="R">
 						<canvas id="graphcanvas" role="img"></canvas>
 					</div>
 				</div>
@@ -245,70 +300,70 @@
 		<div class="popupframe">
 			<div class="pu-topl"></div>
 			<div class="pu-topm"></div>
-			<div class="pu-topr"></div>
+			<div class="pu-topr"><div class="closebtn" onclick="CloseSelection()"></div></div>
 			<div class="pu-midl"></div>
 			<div class="pu-midm">
 				<div id="pu-sel-class" hidden>
 					<p class="sel-info">Select your class:<p>
 					<ul id="class-sel-list">
-						<li id="class-sel-0" class="class-sel" onclick="SelectClass(this)">
+						<li onclick="SelectClass('beorning')" data-classname="beorning">
 							<span>
-								<img id="class-sel-img-0" class="class-sel-img" src="./images/classes/beorning.png">
-								<p id="class-sel-desc-0" class="class-sel-desc">Beorning</p>
+								<img src="./images/classes/beorning.png">
+								<p>Beorning</p>
 							</span>
 						</li>
-						<li id="class-sel-1" class="class-sel" onclick="SelectClass(this)">
+						<li onclick="SelectClass('burglar')" data-classname="burglar">
 							<span>
-								<img id="class-sel-img-1" class="class-sel-img" src="./images/classes/burglar.png">
-								<p id="class-sel-desc-1" class="class-sel-desc">Burglar</p>
+								<img src="./images/classes/burglar.png">
+								<p>Burglar</p>
 							</span>
 						</li>
-						<li id="class-sel-2" class="class-sel" onclick="SelectClass(this)">
+						<li onclick="SelectClass('captain')" data-classname="captain">
 							<span>
-								<img id="class-sel-img-2" class="class-sel-img" src="./images/classes/captain.png">
-								<p id="class-sel-desc-2" class="class-sel-desc">Captain</p>
+								<img src="./images/classes/captain.png">
+								<p>Captain</p>
 							</span>
 						</li>
-						<li id="class-sel-3" class="class-sel" onclick="SelectClass(this)">
+						<li onclick="SelectClass('champion')" data-classname="champion">
 							<span>
-								<img id="class-sel-img-3" class="class-sel-img" src="./images/classes/champion.png">
-								<p id="class-sel-desc-3" class="class-sel-desc">Champion</p>
+								<img src="./images/classes/champion.png">
+								<p>Champion</p>
 							</span>
 						</li>
-						<li id="class-sel-4" class="class-sel" onclick="SelectClass(this)">
+						<li onclick="SelectClass('guardian')" data-classname="guardian">
 							<span>
-								<img id="class-sel-img-4" class="class-sel-img" src="./images/classes/guardian.png">
-								<p id="class-sel-desc-4" class="class-sel-desc">Guardian</p>
+								<img src="./images/classes/guardian.png">
+								<p>Guardian</p>
 							</span>
 						</li>
-						<li id="class-sel-5" class="class-sel" onclick="SelectClass(this)">
+						<li onclick="SelectClass('hunter')" data-classname="hunter">
 							<span>
-								<img id="class-sel-img-5" class="class-sel-img" src="./images/classes/hunter.png">
-								<p id="class-sel-desc-5" class="class-sel-desc">Hunter</p>
+								<img src="./images/classes/hunter.png">
+								<p>Hunter</p>
 							</span>
 						</li>
-						<li id="class-sel-6" class="class-sel" onclick="SelectClass(this)">
+						<li onclick="SelectClass('loremaster')" data-classname="loremaster">
 							<span>
-								<img id="class-sel-img-6" class="class-sel-img" src="./images/classes/loremaster.png">
-								<p id="class-sel-desc-6" class="class-sel-desc">Lore-master</p>
+								<img src="./images/classes/loremaster.png">
+								<p>Lore-master</p>
 							</span>
 							</li>
-						<li id="class-sel-7" class="class-sel" onclick="SelectClass(this)">
+						<li onclick="SelectClass('minstrel')" data-classname="minstrel">
 							<span>
-								<img id="class-sel-img-7" class="class-sel-img" src="./images/classes/minstrel.png">
-								<p id="class-sel-desc-7" class="class-sel-desc">Minstrel</p>
+								<img src="./images/classes/minstrel.png">
+								<p>Minstrel</p>
 							</span>
 						</li>
-						<li id="class-sel-8" class="class-sel" onclick="SelectClass(this)">
+						<li onclick="SelectClass('runekeeper')" data-classname="runekeeper">
 							<span>
-								<img id="class-sel-img-8" class="class-sel-img" src="./images/classes/runekeeper.png">
-								<p id="class-sel-desc-8" class="class-sel-desc">Rune-keeper</p>
+								<img src="./images/classes/runekeeper.png">
+								<p>Rune-keeper</p>
 							</span>
 						</li>
-						<li id="class-sel-9" class="class-sel" onclick="SelectClass(this)">
+						<li onclick="SelectClass('warden')" data-classname="warden">
 							<span>
-								<img id="class-sel-img-9" class="class-sel-img" src="./images/classes/warden.png">
-								<p id="class-sel-desc-9" class="class-sel-desc">Warden</p>
+								<img src="./images/classes/warden.png">
+								<p>Warden</p>
 							</span>
 						</li>
 					</ul>
@@ -316,81 +371,81 @@
 				<div id="pu-sel-level" hidden>
 					<p class="sel-info">Select your level:<p>
 					<form id="level-sel-form">
-						 <input id="level-sel-range" type="range" onmouseup="SelectLevel(this)" oninput="LvlRangeUpdate(this)"> 
+						 <input id="level-sel-range" type="range" onmouseup="SelectLevel(this.value)" oninput="LvlRangeUpdate(this.value)"> 
 					</form>
 				</div>
 				<div id="pu-sel-pen" hidden>
 					<p class="sel-info">Select penetration setting:<p>
 					<ul id="pen-sel-list">
-						<li id="pen-sel-0" class="pen-sel" onclick="SelectPen(this)" title="no penetrations">
+						<li onclick="SelectPen('nopen')" data-penname="nopen" data-pentype="none" data-pentitle="no penetrations">
 							<span>
-								<p id="pen-sel-shortdesc-0" class="pen-sel-shortdesc">Landscape</p>
-								<img id="pen-sel-img-0" class="pen-sel-img" src="./images/penslotempty.png">
-								<p class="pen-sel-longdesc">No penetrations: landscape, T1</p>
+								<p>Landscape</p>
+								<img src="./images/penslotempty.png">
+								<p>No penetrations: landscape, T1</p>
 							</span>
 						</li>
 						<li class="pen-sep"> </li>
-						<li id="pen-sel-1" class="pen-sel" onclick="SelectPen(this)" title="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
+						<li onclick="SelectPen('onlvl2')" data-penname="onlvl2" data-pentype="hidden2" data-penlevel="onlvl" data-pentitle="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
 							<span>
-								<p id="pen-sel-shortdesc-1" class="pen-sel-shortdesc">On-level T2</p>
-								<img id="pen-sel-img-1" class="pen-sel-img" src="./images/penslotactive.png">
-								<p class="pen-sel-longdesc">Tier 2(hidden): all T2, no skirms</p>
+								<p>On-level T2</p>
+								<img src="./images/penslotactive.png">
+								<p>Tier 2(hidden): all T2, no skirms</p>
 							</span>
 						</li>
 						<li class="pen-sep"> </li>
-						<li id="pen-sel-2" class="pen-sel" onclick="SelectPen(this)" title="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
+						<li onclick="SelectPen('onlvl3')" data-penname="onlvl3" data-pentype="hidden3" data-penlevel="onlvl" data-pentitle="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
 							<span>
-								<p id="pen-sel-shortdesc-2" class="pen-sel-shortdesc">On-level T3-5</p>
-								<img id="pen-sel-img-2" class="pen-sel-img" src="./images/penslotactive.png">
-								<p class="pen-sel-longdesc">Tier 3(hidden): all T3-5, no skirms</p>
+								<p>On-level T3-5</p>
+								<img src="./images/penslotactive.png">
+								<p>Tier 3(hidden): all T3-5, no skirms</p>
 							</span>
 						</li>
 						<li class="pen-sep"> </li>
-						<li id="pen-sel-3" class="pen-sel" onclick="SelectPen(this)" title="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
+						<li onclick="SelectPen('rift2')" data-penname="rift2" data-pentype="hidden2" data-penlevel="54" data-pentitle="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
 							<span>
-								<p id="pen-sel-shortdesc-3" class="pen-sel-shortdesc">Rift T2</p>
-								<img id="pen-sel-img-3" class="pen-sel-img" src="./images/penslotactive.png">
-								<p class="pen-sel-longdesc">Tier 2(hidden): lvl54</p>
+								<p>Rift T2</p>
+								<img src="./images/penslotactive.png">
+								<p>Tier 2(hidden): lvl54</p>
 							</span>
 						</li>
 						<li class="pen-sep"> </li>
-						<li id="pen-sel-4" class="pen-sel" onclick="SelectPen(this)" title="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
+						<li onclick="SelectPen('rift3')" data-penname="rift3" data-pentype="hidden3" data-penlevel="54" data-pentitle="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
 							<span>
-								<p id="pen-sel-shortdesc-4" class="pen-sel-shortdesc">Rift T3</p>
-								<img id="pen-sel-img-4" class="pen-sel-img" src="./images/penslotactive.png">
-								<p class="pen-sel-longdesc">Tier 3(hidden): lvl54</p>
+								<p>Rift T3</p>
+								<img src="./images/penslotactive.png">
+								<p>Tier 3(hidden): lvl54</p>
 							</span>
 						</li>
 						<li class="pen-sep"> </li>
-						<li id="pen-sel-5" class="pen-sel" onclick="SelectPen(this)" title="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
+						<li onclick="SelectPen('too2')" data-penname="too2" data-pentype="hidden2" data-penlevel="78" data-pentitle="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
 							<span>
-								<p id="pen-sel-shortdesc-5" class="pen-sel-shortdesc">ToO T2</p>
-								<img id="pen-sel-img-5" class="pen-sel-img" src="./images/penslotactive.png">
-								<p class="pen-sel-longdesc">Tier 2(hidden): lvl78</p>
+								<p>ToO T2</p>
+								<img src="./images/penslotactive.png">
+								<p>Tier 2(hidden): lvl78</p>
 							</span>
 						</li>
 						<li class="pen-sep"> </li>
-						<li id="pen-sel-6" class="pen-sel" onclick="SelectPen(this)" title="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
+						<li onclick="SelectPen('throne2')" data-penname="throne2" data-pentype="hidden2" data-penlevel="108" data-pentitle="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
 							<span>
-								<p id="pen-sel-shortdesc-6" class="pen-sel-shortdesc">Throne T2</p>
-								<img id="pen-sel-img-6" class="pen-sel-img" src="./images/penslotactive.png">
-								<p class="pen-sel-longdesc">Tier 2(hidden): lvl108</p>
+								<p>Throne T2</p>
+								<img src="./images/penslotactive.png">
+								<p>Tier 2(hidden): lvl108</p>
 							</span>
 						</li>
 						<li class="pen-sep"> </li>
-						<li id="pen-sel-7" class="pen-sel" onclick="SelectPen(this)" title="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
+						<li onclick="SelectPen('abyss2')" data-penname="abyss2" data-pentype="enhiii" data-penlevel="115" data-pentitle="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
 							<span>
-								<p id="pen-sel-shortdesc-7" class="pen-sel-shortdesc">Abyss T2</p>
-								<img id="pen-sel-img-7" class="pen-sel-img" src="./images/penslotactive.png">
-								<p class="pen-sel-longdesc">Enhancement III: Abyss T2 lvl115</p>
+								<p>Abyss T2</p>
+								<img src="./images/penslotactive.png">
+								<p>Enhancement III: Abyss T2 lvl115</p>
 							</span>
 						</li>
 						<li class="pen-sep"> </li>
-						<li id="pen-sel-8" class="pen-sel" onclick="SelectPen(this)" title="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
+						<li onclick="SelectPen('anvil')" data-penname="anvil" data-pentype="enhiii" data-penlevel="120" data-pentitle="#bpepen Block Penetration&#13&#10#bpepen Parry Penetration&#13&#10#bpepen Evade Penetration&#13&#10#resistpen Resistance Penetration&#13&#10#armourpen Penetrate Armour">
 							<span>
-								<p id="pen-sel-shortdesc-8" class="pen-sel-shortdesc">Anvil T1-3</p>
-								<img id="pen-sel-img-8" class="pen-sel-img" src="./images/penslotactive.png">
-								<p class="pen-sel-longdesc">Enhancement III: Anvil T1-3 lvl120</p>
+								<p>Anvil T1-3</p>
+								<img src="./images/penslotactive.png">
+								<p>Enhancement III: Anvil T1-3 lvl120</p>
 							</span>
 						</li>
 					</ul>
@@ -398,136 +453,136 @@
 				<div id="pu-sel-graph" hidden>
 					<p class="sel-info">Select percentage graph:<p>
 					<ul id="graph-sel-list">
-						<li id="graph-sel-0" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('crithit')" data-percname="crithit">
 							<span>
-								<img id="graph-sel-img-0" class="graph-sel-img" src="./images/percdeco1.png">
-								<p id="graph-sel-desc-0" class="graph-sel-desc">Critical Hit Chance</p>
+								<img src="./images/percdeco1.png">
+								<p>Critical Hit Chance</p>
 							</span>
 						</li>
-						<li id="graph-sel-1" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('devhit')" data-percname="devhit">
 							<span>
-								<img id="graph-sel-img-1" class="graph-sel-img" src="./images/percdeco1.png">
-								<p id="graph-sel-desc-1" class="graph-sel-desc">Devastating Hit Chance</p>
+								<img src="./images/percdeco1.png">
+								<p>Devastating Hit Chance</p>
 							</span>
 						</li>
-						<li id="graph-sel-2" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('critmagn')" data-percname="critmagn">
 							<span>
-								<img id="graph-sel-img-2" class="graph-sel-img" src="./images/percdeco1.png">
-								<p id="graph-sel-desc-2" class="graph-sel-desc">Critical/Devastating Hit Magnitude</p>
+								<img src="./images/percdeco1.png">
+								<p>Critical/Devastating Hit Magnitude</p>
 							</span>
 						</li>
-						<li id="graph-sel-3" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('finesse')" data-percname="finesse">
 							<span>
-								<img id="graph-sel-img-3" class="graph-sel-img" src="./images/percdeco1.png">
-								<p id="graph-sel-desc-3" class="graph-sel-desc">Finesse</p>
+								<img src="./images/percdeco1.png">
+								<p>Finesse</p>
 							</span>
 						</li>
-						<li id="graph-sel-4" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('phydmg')" data-percname="phydmg">
 							<span>
-								<img id="graph-sel-img-4" class="graph-sel-img" src="./images/percdeco1.png">
-								<p id="graph-sel-desc-4" class="graph-sel-desc">Physical Damage</p>
+								<img src="./images/percdeco1.png">
+								<p>Physical Damage</p>
 							</span>
 						</li>
-						<li id="graph-sel-5" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('tacdmg')" data-percname="tacdmg">
 							<span>
-								<img id="graph-sel-img-5" class="graph-sel-img" src="./images/percdeco1.png">
-								<p id="graph-sel-desc-5" class="graph-sel-desc">Tactical Damage</p>
+								<img src="./images/percdeco1.png">
+								<p>Tactical Damage</p>
 							</span>
 						</li>
-						<li id="graph-sel-6" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('outheal')" data-percname="outheal">
 							<span>
-								<img id="graph-sel-img-6" class="graph-sel-img" src="./images/percdeco1.png">
-								<p id="graph-sel-desc-6" class="graph-sel-desc">Outgoing Healing</p>
+								<img src="./images/percdeco1.png">
+								<p>Outgoing Healing</p>
 							</span>
 						</li>
-						<li id="graph-sel-7" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('resist')" data-percname="resist">
 							<span>
-								<img id="graph-sel-img-7" class="graph-sel-img" src="./images/percdeco2.png">
-								<p id="graph-sel-desc-7" class="graph-sel-desc">Resistance</p>
+								<img src="./images/percdeco2.png">
+								<p>Resistance</p>
 							</span>
 						</li>
-						<li id="graph-sel-8" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('critdef')" data-percname="critdef">
 							<span>
-								<img id="graph-sel-img-8" class="graph-sel-img" src="./images/percdeco2.png">
-								<p id="graph-sel-desc-8" class="graph-sel-desc">Critical Defence</p>
+								<img src="./images/percdeco2.png">
+								<p>Critical Defence</p>
 							</span>
 						</li>
-						<li id="graph-sel-9" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('inheal')" data-percname="inheal">
 							<span>
-								<img id="graph-sel-img-9" class="graph-sel-img" src="./images/percdeco2.png">
-								<p id="graph-sel-desc-9" class="graph-sel-desc">Incoming Healing</p>
+								<img src="./images/percdeco2.png">
+								<p>Incoming Healing</p>
 							</span>
 						</li>
-						<li id="graph-sel-10" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('block')" data-percname="block">
 							<span>
-								<img id="graph-sel-img-10" class="graph-sel-img" src="./images/percdeco3.png">
-								<p id="graph-sel-desc-10" class="graph-sel-desc">Block Chance</p>
+								<img src="./images/percdeco3.png">
+								<p>Block Chance</p>
 							</span>
 						</li>
-						<li id="graph-sel-11" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('partblock')" data-percname="partblock">
 							<span>
-								<img id="graph-sel-img-11" class="graph-sel-img" src="./images/percdeco3.png">
-								<p id="graph-sel-desc-11" class="graph-sel-desc">Partial Block Chance</p>
+								<img src="./images/percdeco3.png">
+								<p>Partial Block Chance</p>
 							</span>
 						</li>
-						<li id="graph-sel-12" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('partblockmit')" data-percname="partblockmit">
 							<span>
-								<img id="graph-sel-img-12" class="graph-sel-img" src="./images/percdeco3.png">
-								<p id="graph-sel-desc-12" class="graph-sel-desc">Partial Block Mitigation</p>
+								<img src="./images/percdeco3.png">
+								<p>Partial Block Mitigation</p>
 							</span>
 						</li>
-						<li id="graph-sel-13" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('parry')" data-percname="parry">
 							<span>
-								<img id="graph-sel-img-13" class="graph-sel-img" src="./images/percdeco3.png">
-								<p id="graph-sel-desc-13" class="graph-sel-desc">Parry Chance</p>
+								<img src="./images/percdeco3.png">
+								<p>Parry Chance</p>
 							</span>
 						</li>
-						<li id="graph-sel-14" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('partparry')" data-percname="partparry">
 							<span>
-								<img id="graph-sel-img-14" class="graph-sel-img" src="./images/percdeco3.png">
-								<p id="graph-sel-desc-14" class="graph-sel-desc">Partial Parry Chance</p>
+								<img src="./images/percdeco3.png">
+								<p>Partial Parry Chance</p>
 							</span>
 						</li>
-						<li id="graph-sel-15" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('partparrymit')" data-percname="partparrymit">
 							<span>
-								<img id="graph-sel-img-15" class="graph-sel-img" src="./images/percdeco3.png">
-								<p id="graph-sel-desc-15" class="graph-sel-desc">Partial Parry Mitigation</p>
+								<img src="./images/percdeco3.png">
+								<p>Partial Parry Mitigation</p>
 							</span>
 						</li>
-						<li id="graph-sel-16" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('evade')" data-percname="evade">
 							<span>
-								<img id="graph-sel-img-16" class="graph-sel-img" src="./images/percdeco3.png">
-								<p id="graph-sel-desc-16" class="graph-sel-desc">Evade Chance</p>
+								<img src="./images/percdeco3.png">
+								<p>Evade Chance</p>
 							</span>
 						</li>
-						<li id="graph-sel-17" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('partevade')" data-percname="partevade">
 							<span>
-								<img id="graph-sel-img-17" class="graph-sel-img" src="./images/percdeco3.png">
-								<p id="graph-sel-desc-17" class="graph-sel-desc">Partial Evade Chance</p>
+								<img src="./images/percdeco3.png">
+								<p>Partial Evade Chance</p>
 							</span>
 						</li>
-						<li id="graph-sel-18" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('partevademit')" data-percname="partevademit">
 							<span>
-								<img id="graph-sel-img-18" class="graph-sel-img" src="./images/percdeco3.png">
-								<p id="graph-sel-desc-18" class="graph-sel-desc">Partial Evade Mitigation</p>
+								<img src="./images/percdeco3.png">
+								<p>Partial Evade Mitigation</p>
 							</span>
 						</li>
-						<li id="graph-sel-19" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('phymit')" data-percname="phymit">
 							<span>
-								<img id="graph-sel-img-19" class="graph-sel-img" src="./images/percdeco4.png">
-								<p id="graph-sel-desc-19" class="graph-sel-desc">Physical Mitigation</p>
+								<img src="./images/percdeco4.png">
+								<p>Physical Mitigation</p>
 							</span>
 						</li>
-						<li id="graph-sel-20" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('ofmit')" data-percname="ofmit">
 							<span>
-								<img id="graph-sel-img-20" class="graph-sel-img" src="./images/percdeco4.png">
-								<p id="graph-sel-desc-20" class="graph-sel-desc">Orc-craft/Fell-Wrought Mitigation</p>
+								<img src="./images/percdeco4.png">
+								<p>Orc-craft/Fell-Wrought Mitigation</p>
 							</span>
 						</li>
-						<li id="graph-sel-21" class="graph-sel" onclick="SelectGraph(this)">
+						<li onclick="SelectGraph('tacmit')" data-percname="tacmit">
 							<span>
-								<img id="graph-sel-img-21" class="graph-sel-img" src="./images/percdeco4.png">
-								<p id="graph-sel-desc-21" class="graph-sel-desc">Tactical Mitigation</p>
+								<img src="./images/percdeco4.png">
+								<p>Tactical Mitigation</p>
 							</span>
 						</li>
 					</ul>
@@ -543,7 +598,7 @@
 <footer>
 	<div class="top-div"></div>
 	<div id="poweredbycs"><span>Powered by</span> <a href="https://www.lotrointerface.com/downloads/info1022-CalcStat.html" target="_blank">CalcStat</a> <span id="cs-version">v1.3.2f</span></div>
-	<div id="madeby"><span id="bygiseldah">v0.993 by Giseldah</span> <div id="donatebtn">
+	<div id="madeby"><span id="bygiseldah">v0.994 by Giseldah</span> <div id="donatebtn">
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick" />
 <input type="hidden" name="hosted_button_id" value="A6JQLXZ5WF9BC" />
