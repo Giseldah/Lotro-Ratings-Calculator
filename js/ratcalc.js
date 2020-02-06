@@ -527,21 +527,25 @@ var graphconfig = {
 	data: {
 		datasets: [{
 			label: ' ',
+			backgroundColor: 'grey',
 			borderColor: 'grey',
 			borderWidth: 3,
 			fill: false
 		}, {
 			label: ' ',
+			backgroundColor: 'red',
 			borderColor: 'red',
 			borderWidth: 3,
 			fill: false
 		}, {
 			label: ' ',
+			backgroundColor: 'blue',
 			borderColor: 'blue',
 			borderWidth: 5,
 			fill: false
 		}, {
 			label: ' ',
+			backgroundColor: 'green',
 			borderColor: 'green',
 			borderWidth: 5,
 			fill: false
@@ -557,7 +561,12 @@ var graphconfig = {
 		},
 		tooltips: {
 			mode: 'nearest',
-			intersect: false
+			intersect: false,
+			callbacks: {
+				label: function(tooltipItem, data) {
+					return RoundDbl(tooltipItem.value,2)+'%';
+				}
+			}
 		},
 		elements: {
 			point: {
@@ -575,7 +584,10 @@ var graphconfig = {
 				},
 				ticks: {
 					Min: 0,
-					maxTicksLimit: 12
+					maxTicksLimit: 12,
+					callback: function(value, index, values) {
+                        return RoundDbl(value,0);
+                    }
 				}
 			}],
 			yAxes: [{
@@ -585,7 +597,10 @@ var graphconfig = {
 					labelString: ' '
 				},
 				ticks: {
-					beginAtZero: true
+					beginAtZero: true,
+					callback: function(value, index, values) {
+                        return value+'%';
+                    }
 				}
 			}]
 		}
@@ -677,7 +692,7 @@ function UpdateGraphData() {
 	for (var i = 0; i < GraphPoints; i++) {
 		r = RoundDbl(i*Rstep,1);
 		GDRating.push(r);
-		p = RoundDbl(PD_Poff+CalcStat(csps+'PRatP',PlayerLvl,r+PD_Pen),5);
+		p = PD_Poff+CalcStat(csps+'PRatP',PlayerLvl,r+PD_Pen);
 		switch(GraphType) {
 			case 1:
 				GDCurrent.push(((Interval0 <= i && i <= Interval1) ? p : NaN));
@@ -709,6 +724,7 @@ function UpdateGraphData() {
 
 function ShowNotes() {
 	document.getElementById('notes').hidden = false;
+	document.getElementById('notes-text').scrollTop = 0;
 }
 
 function CloseNotes() {
