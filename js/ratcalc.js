@@ -563,8 +563,32 @@ var graphconfig = {
 			mode: 'nearest',
 			intersect: false,
 			callbacks: {
+				title: function(tooltipItem, data) {
+					switch(tooltipItem[0].index) {
+						case Interval1:
+							return Fix1.r.toString();
+							break;
+						case Interval2:
+								return ((GraphType <= 2) ? Fix2.r : RoundDbl(tooltipItem[0].xLabel,2)).toString();
+							break;
+						default:
+							return RoundDbl(tooltipItem[0].xLabel,1).toString();
+					}
+				},
 				label: function(tooltipItem, data) {
-					return RoundDbl(tooltipItem.value,2)+'%';
+					switch(tooltipItem.index) {
+						case Interval1:
+							if (tooltipItem.datasetIndex == 3)
+								return Fix1.p+'%';
+							break;
+						case Interval2:
+							if ((GraphType == 1 && tooltipItem.datasetIndex == 2) || (GraphType == 2 && tooltipItem.datasetIndex == 1))
+								return Fix2.p+'%';
+							else if (GraphType != 3)
+								break;
+						default:
+							return RoundDbl(tooltipItem.value,2)+'%';
+					}
 				}
 			}
 		},
@@ -575,8 +599,6 @@ var graphconfig = {
 		},
 		scales: {
 			xAxes: [{
-				gridLines: {
-				},
 				display: true,
 				scaleLabel: {
 					display: true,
@@ -639,10 +661,19 @@ function UpdateGraph(ps) {
 }
 
 var GraphPoints = 122;
+var Interval0 = 0;
+var Interval1 = 0;
+var Fix1 = {r: 0, p: 0};
+var Interval2 = 0;
+var Fix2 = {r: 0, p: 0};
+var Interval3 = GraphPoints-1;
+var GraphType = 2;
 
 function UpdateGraphData() {
 	var ps = GraphPerc;
 	var PD_LinkCurRat = Number(document.getElementById(ps+'currrat').value);
+	var PD_LinkCurPerc = Number(document.getElementById(ps+'currperc').innerHTML.replace('%',''));
+	var PD_LinkTgtPerc = Number(document.getElementById(ps+'targperc').value.replace('%',''));
 	var PD_LinkTgtRat = Number(document.getElementById(ps+'targrat').innerHTML);
 	var csps = ReplaceArmourType(ps);
 	var PD_Poff = CalcStat(csps+'PBonus',PlayerLvl);
@@ -663,20 +694,28 @@ function UpdateGraphData() {
 	}
 	Rstep = Rmax/(GraphPoints-1);
 
-	var Interval0, Interval1, Interval2, Interval3, GraphType;
-	Interval0 = 0;
 	if (PD_LinkCurRat > PD_LinkTgtRat) {
 		Interval1 = Math.round(PD_LinkTgtRat/Rstep+DblCalcDev);
+		Fix1.r = PD_LinkTgtRat;
+		Fix1.p = PD_LinkTgtPerc;
 		Interval2 = Math.round(PD_LinkCurRat/Rstep+DblCalcDev);
+		Fix2.r = PD_LinkCurRat;
+		Fix2.p = PD_LinkCurPerc;
 		Interval3 = GraphPoints-1;
 		GraphType = 1;
 	} else if (PD_LinkCurRat < PD_LinkTgtRat) {
 		Interval1 = Math.round(PD_LinkCurRat/Rstep+DblCalcDev);
+		Fix1.r = PD_LinkCurRat;
+		Fix1.p = PD_LinkCurPerc;
 		Interval2 = Math.round(PD_LinkTgtRat/Rstep+DblCalcDev);
+		Fix2.r = PD_LinkTgtRat;
+		Fix2.p = PD_LinkTgtPerc;
 		Interval3 = GraphPoints-1;
 		GraphType = 2;
 	} else {
 		Interval1 = Math.round(PD_LinkCurRat/Rstep+DblCalcDev);
+		Fix1.r = PD_LinkCurRat;
+		Fix1.p = PD_LinkCurPerc;
 		Interval2 = GraphPoints-1;
 		GraphType = 3;
 	}
@@ -690,7 +729,7 @@ function UpdateGraphData() {
 	var r;
 	var p;
 	for (var i = 0; i < GraphPoints; i++) {
-		r = RoundDbl(i*Rstep,1);
+		r = i*Rstep;
 		GDRating.push(r);
 		p = PD_Poff+CalcStat(csps+'PRatP',PlayerLvl,r+PD_Pen);
 		switch(GraphType) {

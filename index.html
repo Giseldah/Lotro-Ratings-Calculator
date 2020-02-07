@@ -109,8 +109,8 @@ Calculations work like:<br />
 						<p id="offencehdr" class="stathdr">Offence</p>
 						<p id="offencesep" class="sep"></p>
 						<label id="crithitlbl" class="perclabel crithitrow" for="crithitcurrrat">Critical Hit</label>
-						<div id="crithitlockedbtn" class="lockedbtn crithitrow" onclick="ProcessLockedBtn(this)"></div>
-						<div id="crithitunlockedbtn" class="unlockedbtn crithitrow" style="display:none" onclick="ProcessUnlockedBtn(this)"></div>
+						<div id="crithitlockedbtn" class="lockedbtn crithitrow" onclick="ProcessLockedBtn(this)" title="Click to ungroup."></div>
+						<div id="crithitunlockedbtn" class="unlockedbtn crithitrow" style="display:none" onclick="ProcessUnlockedBtn(this)" title="Click to group."></div>
 						<input id="crithitcurrrat" class="currrat crithitrow" type="text" value="0" pattern="[0-9]+" onchange="ProcessCurrRat(this)" autofocus>
 						<div id="crithitcurrperc" class="currperc crithitrow">100.0%</div>
 						<input id="crithittargperc" class="targperc crithitrow" type="text" value="0.0%" pattern="[0-9.%]+" onchange="ProcessTargPerc(this)">
@@ -141,8 +141,8 @@ Calculations work like:<br />
 						<p id="phydmgtargrat" class="targrat phydmgrow">0</p>
 						<p id="phydmgratdiff" class="ratdiff phydmgrow">0</p>
 						<label id="tacdmglbl" class="perclabel tacdmgrow" for="tacdmgcurrrat">Tactical Mastery</label>
-						<div id="tacdmglockedbtn" class="lockedbtn tacdmgrow" onclick="ProcessLockedBtn(this)"></div>
-						<div id="tacdmgunlockedbtn" class="unlockedbtn tacdmgrow" style="display:none" onclick="ProcessUnlockedBtn(this)"></div>
+						<div id="tacdmglockedbtn" class="lockedbtn tacdmgrow" onclick="ProcessLockedBtn(this)" title="Click to ungroup."></div>
+						<div id="tacdmgunlockedbtn" class="unlockedbtn tacdmgrow" style="display:none" onclick="ProcessUnlockedBtn(this)" title="Click to group."></div>
 						<input id="tacdmgcurrrat" class="currrat tacdmgrow" type="text" value="0" pattern="[0-9]+" onchange="ProcessCurrRat(this)">
 						<p id="tacdmgcurrperc" class="currperc tacdmgrow">0.0%</p>
 						<input id="tacdmgtargperc" class="targperc tacdmgrow" type="text" value="0.0%" pattern="[0-9.%]+" onchange="ProcessTargPerc(this)">
@@ -177,8 +177,8 @@ Calculations work like:<br />
 						<p id="avoidancehdr" class="stathdr">Avoidance</p>
 						<p id="avoidancesep" class="sep"></p>
 						<label id="blocklbl" class="perclabel blockrow" for="blockcurrrat">Block</label>
-						<div id="blocklockedbtn" class="lockedbtn blockrow" onclick="ProcessLockedBtn(this)"></div>
-						<div id="blockunlockedbtn" class="unlockedbtn blockrow" style="display:none" onclick="ProcessUnlockedBtn(this)"></div>
+						<div id="blocklockedbtn" class="lockedbtn blockrow" onclick="ProcessLockedBtn(this)" title="Click to ungroup."></div>
+						<div id="blockunlockedbtn" class="unlockedbtn blockrow" style="display:none" onclick="ProcessUnlockedBtn(this)" title="Click to group."></div>
 						<input id="blockcurrrat" class="currrat blockrow" type="text" value="0" pattern="[0-9]+" onchange="ProcessCurrRat(this)">
 						<p id="blockcurrperc" class="currperc blockrow">0.0%</p>
 						<input id="blocktargperc" class="targperc blockrow" type="text" value="0.0%" pattern="[0-9.%]+" onchange="ProcessTargPerc(this)">
@@ -197,8 +197,8 @@ Calculations work like:<br />
 						<p id="partblockmittargrat" class="targrat partblockmitrow">0</p>
 						<p id="partblockmitratdiff" class="ratdiff partblockmitrow">0</p>
 						<label id="parrylbl" class="perclabel parryrow" for="parrycurrrat">Parry</label>
-						<div id="parrylockedbtn" class="lockedbtn parryrow" onclick="ProcessLockedBtn(this)"></div>
-						<div id="parryunlockedbtn" class="unlockedbtn parryrow" style="display:none" onclick="ProcessUnlockedBtn(this)"></div>
+						<div id="parrylockedbtn" class="lockedbtn parryrow" onclick="ProcessLockedBtn(this)" title="Click to ungroup."></div>
+						<div id="parryunlockedbtn" class="unlockedbtn parryrow" style="display:none" onclick="ProcessUnlockedBtn(this)" title="Click to group."></div>
 						<input id="parrycurrrat" class="currrat parryrow" type="text" value="0" pattern="[0-9]+" onchange="ProcessCurrRat(this)">
 						<p id="parrycurrperc" class="currperc parryrow">0.0%</p>
 						<input id="parrytargperc" class="targperc parryrow" type="text" value="0.0%" pattern="[0-9.%]+" onchange="ProcessTargPerc(this)">
@@ -217,8 +217,8 @@ Calculations work like:<br />
 						<p id="partparrymittargrat" class="targrat partparrymitrow">0</p>
 						<p id="partparrymitratdiff" class="ratdiff partparrymitrow">0</p>
 						<label id="evadelbl" class="perclabel evaderow" for="evadecurrrat">Evade</label>
-						<div id="evadelockedbtn" class="lockedbtn evaderow" onclick="ProcessLockedBtn(this)"></div>
-						<div id="evadeunlockedbtn" class="unlockedbtn evaderow" style="display:none" onclick="ProcessUnlockedBtn(this)"></div>
+						<div id="evadelockedbtn" class="lockedbtn evaderow" onclick="ProcessLockedBtn(this)" title="Click to ungroup."></div>
+						<div id="evadeunlockedbtn" class="unlockedbtn evaderow" style="display:none" onclick="ProcessUnlockedBtn(this)" title="Click to group."></div>
 						<input id="evadecurrrat" class="currrat evaderow" type="text" value="0" pattern="[0-9]+" onchange="ProcessCurrRat(this)">
 						<p id="evadecurrperc" class="currperc evaderow">0.0%</p>
 						<input id="evadetargperc" class="targperc evaderow" type="text" value="0.0%" pattern="[0-9.%]+" onchange="ProcessTargPerc(this)">
@@ -239,8 +239,8 @@ Calculations work like:<br />
 						<p id="mitigationshdr" class="stathdr">Mitigations</p>
 						<p id="mitigationssep" class="sep"></p>
 						<label id="phymitlbl" class="perclabel phymitrow" for="phymitcurrrat">Physical</label>
-						<div id="phymitlockedbtn" class="lockedbtn phymitrow" onclick="ProcessLockedBtn(this)"></div>
-						<div id="phymitunlockedbtn" class="unlockedbtn phymitrow" style="display:none" onclick="ProcessUnlockedBtn(this)"></div>
+						<div id="phymitlockedbtn" class="lockedbtn phymitrow" onclick="ProcessLockedBtn(this)" title="Click to ungroup."></div>
+						<div id="phymitunlockedbtn" class="unlockedbtn phymitrow" style="display:none" onclick="ProcessUnlockedBtn(this)" title="Click to group."></div>
 						<input id="phymitcurrrat" class="currrat phymitrow" type="text" value="0" pattern="[0-9]+" onchange="ProcessCurrRat(this)">
 						<p id="phymitcurrperc" class="currperc phymitrow">0.0%</p>
 						<input id="phymittargperc" class="targperc phymitrow" type="text" value="0.0%" pattern="[0-9.%]+" onchange="ProcessTargPerc(this)">
@@ -598,11 +598,11 @@ Calculations work like:<br />
 <footer>
 	<div class="top-div"></div>
 	<div id="poweredbycs"><span>Powered by</span> <a href="https://www.lotrointerface.com/downloads/info1022-CalcStat.html" target="_blank">CalcStat</a> <span id="cs-version">v1.3.2f</span></div>
-	<div id="madeby"><span id="bygiseldah">v0.995a by Giseldah</span> <div id="donatebtn">
+	<div id="madeby"><span id="bygiseldah">v1.0 by Giseldah</span> <div id="donatebtn">
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick" />
 <input type="hidden" name="hosted_button_id" value="A6JQLXZ5WF9BC" />
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" title="Pay me a cup of coffee or something. :)" alt="Donate with PayPal button" />
 <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
 </form>
 		</div>
