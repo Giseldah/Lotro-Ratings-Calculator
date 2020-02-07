@@ -672,8 +672,8 @@ var GraphType = 2;
 function UpdateGraphData() {
 	var ps = GraphPerc;
 	var PD_LinkCurRat = Number(document.getElementById(ps+'currrat').value);
-	var PD_LinkCurPerc = Number(document.getElementById(ps+'currperc').innerHTML.replace('%',''));
-	var PD_LinkTgtPerc = Number(document.getElementById(ps+'targperc').value.replace('%',''));
+	var PD_LinkCurPerc = Number(document.getElementById(ps+'currperc').innerHTML.replace('%','').replace('-',''));
+	var PD_LinkTgtPerc = Number(document.getElementById(ps+'targperc').value.replace('%','').replace('-',''));
 	var PD_LinkTgtRat = Number(document.getElementById(ps+'targrat').innerHTML);
 	var csps = ReplaceArmourType(ps);
 	var PD_Poff = CalcStat(csps+'PBonus',PlayerLvl);
