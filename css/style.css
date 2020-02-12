@@ -489,11 +489,6 @@ main {
 	text-align: center;
 }
 
-input[type="text"]
-{
-    font-size: 11pt;
-}
-
 .perclabel {
 	grid-column: 1 / span 2;
 	background-color: rgba(255, 255, 255, 0.05);
@@ -543,6 +538,7 @@ input[type="text"]
 .currrat {
 	grid-column: 3;
 	background-color: white;
+	font-size: 11pt;
 }
 
 .currrat:disabled {
@@ -560,6 +556,7 @@ input[type="text"]
 .targperc {
 	grid-column: 5;
 	background-color: white;
+	font-size: 11pt;
 }
 
 .targperc:disabled {

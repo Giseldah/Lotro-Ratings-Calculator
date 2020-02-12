@@ -522,6 +522,18 @@ function EnablePercGroup(ps) {
 	}
 }
 
+var GraphInit = false;
+var GraphPoints = 1001;
+var Interval0 = 0;
+var Interval1 = 0;
+var Fix1 = {r: 0, p: 0};
+var Interval2 = 0;
+var Fix2 = {r: 0, p: 0};
+var Interval3 = GraphPoints-1;
+var GraphType = 2;
+var NxScale;
+var NyScale;
+
 var graphconfig = {
 	type: 'line',
 	data: {
@@ -567,12 +579,11 @@ var graphconfig = {
 					switch(tooltipItem[0].index) {
 						case Interval1:
 							return Fix1.r.toString();
-							break;
 						case Interval2:
-								return ((GraphType <= 2) ? Fix2.r : RoundDbl(tooltipItem[0].xLabel,2)).toString();
-							break;
+							if (GraphType <= 2)
+								return Fix2.r.toString();
 						default:
-							return RoundDbl(tooltipItem[0].xLabel,1).toString();
+							return RoundDbl(data.labels[tooltipItem[0].index],1);
 					}
 				},
 				label: function(tooltipItem, data) {
@@ -598,37 +609,88 @@ var graphconfig = {
 			}
 		},
 		scales: {
-			xAxes: [{
+			x: {
 				display: true,
+				min: 0,
 				scaleLabel: {
 					display: true,
 					labelString: ' '
 				},
 				ticks: {
-					Min: 0,
-					maxTicksLimit: 12,
+					major: {
+						enabled: true
+					},
+					fontSize: function(context) {
+						return context.tick.major ? 14 : 0;
+					},
 					callback: function(value, index, values) {
-                        return RoundDbl(value,0);
-                    }
-				}
-			}],
-			yAxes: [{
+                        return RoundDbl(value,0).toString();
+                    },
+					maxRotation: 0,
+					padding: 5
+				},
+				afterBuildTicks: function(scale) {
+					const ticks = scale.ticks;
+					for (let i = 0; i < ticks.length; i++) {
+						ticks[i].major = (ticks[i].value/NxScale.getTickSpacing() == Math.round(ticks[i].value/NxScale.getTickSpacing()));
+					}
+					scale.ticks = ticks;
+				},
+				gridLines: {
+					color: function(context) {
+						return context.tick.major ? (context.tick.value ? 'grey' : 'black') : 'lightgrey';
+					},
+					lineWidth: function(context) {
+						return context.tick.major ? (context.tick.value ? 1 : 2) : 1;
+					},
+					/*z: function(context) {
+						return context.tick.major ? (context.tick.value ? -200 : -100) : -300; //sadly does not work
+					},*/
+					drawTicks: false
+				},
+				type: 'linear'
+			},
+			y: {
+				beginAtZero: true,
 				display: true,
 				scaleLabel: {
 					display: true,
 					labelString: ' '
 				},
 				ticks: {
-					beginAtZero: true,
+					major: {
+						enabled: true
+					},
+					fontSize: function(context) {
+						return context.tick.major ? 14 : 0;
+					},
 					callback: function(value, index, values) {
                         return value+'%';
-                    }
-				}
-			}]
+                    },
+					padding: 5
+				},
+				afterBuildTicks: function(scale) {
+					const ticks = scale.ticks;
+					for (let i = 0; i < ticks.length; i++) {
+						ticks[i].major = (ticks[i].value/NyScale.getTickSpacing() == Math.round(ticks[i].value/NyScale.getTickSpacing()));
+					}
+					scale.ticks = ticks;
+				},
+				gridLines: {
+					color: function(context) {
+						return context.tick.major ? (context.tick.value ? 'grey' : 'black') : 'lightgrey';
+					},
+					lineWidth: function(context) {
+						return context.tick.major ? (context.tick.value ? 1 : 2) : 1;
+					},
+					drawTicks: false
+				},
+				type: 'linear'
+			}
 		}
 	}
 };
-
+		
 function InitGraph() {
 	var lis = document.getElementById('graph-sel-list').getElementsByTagName('li');
 	var i;
@@ -645,31 +707,27 @@ function InitGraph() {
 	graphconfig.data.datasets[1].label = gc.getAttribute('data-lblundertarget');
 	graphconfig.data.datasets[2].label = gc.getAttribute('data-lblabovetarget');
 	graphconfig.data.datasets[3].label = gc.getAttribute('data-lblcurrent');
-	graphconfig.options.scales.xAxes[0].scaleLabel.labelString = gc.getAttribute('data-lblrating');
-	graphconfig.options.scales.yAxes[0].scaleLabel.labelString = gc.getAttribute('data-lblperc');
+	graphconfig.options.scales.x.scaleLabel.labelString = gc.getAttribute('data-lblrating');
+	graphconfig.options.scales.y.scaleLabel.labelString = gc.getAttribute('data-lblperc');
+	NxScale = new NiceScale(0,100,9);
+	NyScale = new NiceScale(0,100,9);
+	GraphInit = true;
 	UpdateGraphData();
-	Chart.defaults.global.defaultFontSize = 14;
-	Chart.defaults.global.defaultFontColor = 'black';
+	Chart.defaults.fontSize = 14;
+	Chart.defaults.fontColor = 'black';
 	window.myLine = new Chart(document.getElementById('graphcanvas').getContext('2d'),graphconfig);
 }
 
 function UpdateGraph(ps) {
-	if (ps == GraphPerc) {
+	if (ps == GraphPerc && GraphInit) {
 		UpdateGraphData();
 		window.myLine.update();
 	}
 }
 
-var GraphPoints = 122;
-var Interval0 = 0;
-var Interval1 = 0;
-var Fix1 = {r: 0, p: 0};
-var Interval2 = 0;
-var Fix2 = {r: 0, p: 0};
-var Interval3 = GraphPoints-1;
-var GraphType = 2;
-
 function UpdateGraphData() {
+	if (!GraphInit) return;
+
 	var ps = GraphPerc;
 	var PD_LinkCurRat = Number(document.getElementById(ps+'currrat').value);
 	var PD_LinkCurPerc = Number(document.getElementById(ps+'currperc').innerHTML.replace('%','').replace('-',''));
@@ -684,16 +742,15 @@ function UpdateGraphData() {
 
 	graphconfig.options.title.text = document.getElementById('perc-name').innerHTML+document.getElementById('graphcontainer').getAttribute('data-lblcapinfo').replace('#capperc',PD_PcapTotal).replace('#caprat',PD_RcapTotal);
 	
-	var Rmax, maxTicksLimit, Rstep;
-	if (PD_LinkCurRat <= PD_RcapTotal) {
-		Rmax = PD_RcapTotal*1.1;
-		maxTicksLimit = 12;
-	} else {
-		maxTicksLimit = 12;
-		Rmax = ((PD_LinkCurRat*1.05)/(maxTicksLimit-1)).toPrecision(2)*(maxTicksLimit-1);
-	}
+	var Rmax, Rstep;
+	NxScale.setMinMaxPoints(0,((PD_LinkCurRat <= PD_RcapTotal) ? PD_RcapTotal*1.05 : PD_LinkCurRat*1.02));
+	Rmax = NxScale.getNiceUpperBound();
 	Rstep = Rmax/(GraphPoints-1);
 
+	var Pmax;
+	NyScale.setMinMaxPoints(0,PD_PcapTotal);
+	Pmax = NyScale.getNiceUpperBound();
+	
 	if (PD_LinkCurRat > PD_LinkTgtRat) {
 		Interval1 = Math.round(PD_LinkTgtRat/Rstep+DblCalcDev);
 		Fix1.r = PD_LinkTgtRat;
@@ -758,7 +815,75 @@ function UpdateGraphData() {
 	graphconfig.data.datasets[1].data = GDUnder;
 	graphconfig.data.datasets[2].data = GDAbove;
 	graphconfig.data.datasets[3].data = GDCurrent;
-	graphconfig.options.scales.xAxes[0].ticks.maxTicksLimit = maxTicksLimit;
+	graphconfig.options.scales.x.suggestedMax = Rmax;
+	graphconfig.options.scales.x.ticks.maxTicksLimit = 999;
+	graphconfig.options.scales.x.ticks.stepSize = NxScale.getTickSpacing()/((Rmax/NxScale.getTickSpacing() >= 8) ? 5 : 10);
+	graphconfig.options.scales.y.suggestedMax = Pmax;
+	graphconfig.options.scales.y.ticks.maxTicksLimit = 999;
+	graphconfig.options.scales.y.ticks.stepSize = NyScale.getTickSpacing()/((Pmax/NyScale.getTickSpacing() >= 6) ? 5 : 10);
+}
+
+function NiceScale (_lowerBound, _upperBound, _maxTicks) {
+
+  var lowerBound = _lowerBound;
+  var upperBound = _upperBound;
+  var maxTicks = _maxTicks || 10;
+  var tickSpacing;
+  var range;
+  var niceLowerBound;
+  var niceUpperBound;
+
+  calculate();
+
+  this.setMaxTicks = function (_maxTicks) {
+    maxTicks = _maxTicks;
+    calculate();
+  };
+
+  this.getNiceUpperBound = function() {
+    return niceUpperBound;
+  };
+
+  this.getNiceLowerBound = function() {
+    return niceLowerBound;
+  };
+
+  this.getTickSpacing = function() {
+    return tickSpacing;
+  };
+
+  this.setMinMaxPoints = function (min, max) {
+    lowerBound = min;
+    upperBound = max;
+    calculate();
+  };
+
+  function calculate () {
+    range = niceNum(upperBound - lowerBound, false);
+    tickSpacing = niceNum(range / (maxTicks - 1), true);
+    niceLowerBound = Math.floor(lowerBound / tickSpacing) * tickSpacing;
+    niceUpperBound = Math.ceil(upperBound / tickSpacing) * tickSpacing;
+  };
+
+  function niceNum (range, round) {
+    var exponent = Math.floor(Math.log10(range));
+    var fraction = range / Math.pow(10, exponent);
+    var niceFraction;
+
+    if (round) {
+      if (fraction < 1.5) niceFraction = 1;
+      else if (fraction < 3) niceFraction = 2;
+      else if (fraction < 7) niceFraction = 5;
+      else niceFraction = 10;
+    } else {
+      if (fraction <= 1) niceFraction = 1;
+      else if (fraction <= 2) niceFraction = 2;
+      else if (fraction <= 5) niceFraction = 5;
+      else niceFraction = 10;
+    }
+
+    return niceFraction * Math.pow(10, exponent);
+  }
 }
 
 function ShowNotes() {
