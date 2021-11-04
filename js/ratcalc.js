@@ -411,9 +411,8 @@ function ChangeClass() {
 	var i;
 	for (i = 0; i < lis.length; i++) {
 		if (lis[i].getAttribute('data-classname') == PlayerClass) {
-			var span = lis[i].firstElementChild;
-			document.getElementById('class-symb').setAttribute('src',span.getElementsByTagName('img')[0].getAttribute('src'));
-			document.getElementById('class-name').innerHTML = span.getElementsByTagName('p')[0].innerHTML;
+			document.getElementById('class-symb').setAttribute('src',lis[i].getElementsByTagName('img')[0].getAttribute('src'));
+			document.getElementById('class-name').innerHTML = lis[i].getElementsByTagName('div')[0].innerHTML;
 			break;
 		}
 	} 

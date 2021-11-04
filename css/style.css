@@ -114,7 +114,6 @@ header {
 }
 
 #class-symb {
-	position: relative;
 	height: 70px;
 }
 
@@ -130,7 +129,7 @@ header {
 #class-name {
 	position: relative;
 	top: -26px;
-	width: 160px;
+	width: 150px;
 	display: inline-block;
 	font-size: 18pt;
 	font-family: Arial;
@@ -147,25 +146,18 @@ header {
 
 #level-deco {
 	position: relative;
+	left: -60px;
 	top: 2px;
 	height: 74px;
 	text-shadow: 0;
 }
 
-#level-deco:hover + #level-number {
-    text-shadow:
-    -1px -1px 0 gold,  
-    1px -1px 0 gold,
-    -1px 1px 0 gold,
-    1px 1px 0 gold;
-}
-
 #level-number {
+	z-index: 20;
 	position: relative;
+	left: 8px;
 	top: -26px;
-	left: -71px;
-	width: 66px;
-	margin-right: -70px;
+	width: 60px;
 	text-align: center;
 	display: inline-block;
 	font-family: Arial;
@@ -174,18 +166,11 @@ header {
 	font-weight: bold;
 }
 
-#level-number:hover {
-    text-shadow:
-    -1px -1px 0 gold,  
-    1px -1px 0 gold,
-    -1px 1px 0 gold,
-    1px 1px 0 gold;
-}
-
 #pen-desc {
 	position: relative;
+	left: -40px;
 	top: -26px;
-	width: 160px;
+	width: 150px;
 	display: inline-block;
 	font-size: 18pt;
 	font-family: Arial;
@@ -195,6 +180,7 @@ header {
 
 #pen-slot {
 	position: relative;
+	left: -40px;
 	top: -3px;
 	height: 64px;
 }
@@ -693,7 +679,7 @@ main {
 	margin-top: 4px;
 }
 
-#class-sel-list p {
+#class-sel-list div {
 	display: inline-block;
 	font-family: "Arial";
 	vertical-align: top;
