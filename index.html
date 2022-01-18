@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>LOTRO Ratings Calculator</title>
 	<script src="./js/Chart.min.js"></script>
     <link rel="stylesheet" type="text/css" href="./css/style.css">
@@ -72,22 +73,22 @@ Calculations work like:<br />
 		<div class="nav-bar">
 			<ul class="actions">
 				<li class="selection">
-					<span id="selitem-class" onclick="MakeSelection('class')" title="Select your class.">
+					<div id="selitem-class" onclick="MakeSelection('class')" title="Select your class.">
 						<img id="class-symb" src="./images/classes/beorning.png">
-						<p id="class-name">Beorning</p>
-					</span>
+						<div id="class-name">Beorning</div>
+					</div>
 				</li>
 				<li class="selection">
-					<span id="selitem-level" onclick="MakeSelection('level')" title="Select your level.">
+					<div id="selitem-level" onclick="MakeSelection('level')" title="Select your level.">
+						<div id="level-number"></div>
 						<img id="level-deco" src="./images/leveldeco.png">
-						<p id="level-number">130</p>
-					</span>
+					</div>
 				</li>
 				<li class="selection">
-					<span id="selitem-pen" onclick="MakeSelection('pen')" title="Select rating penetration setting.">
-						<p id="pen-desc">Landscape</p>
+					<div id="selitem-pen" onclick="MakeSelection('pen')" title="Select rating penetration setting.">
+						<div id="pen-desc">Landscape</div>
 						<img id="pen-slot" src="./images/penslotempty.png">
-					</span>
+					</div>
 				</li>
 			</ul>
 		</div>
@@ -272,8 +273,10 @@ Calculations work like:<br />
 		<div class="nav-bar">
 			<ul class="actions">
 				<li class="selection">
-					<img id="perc-deco" src="./images/percdeco1.png" onclick="MakeSelection('graph')" title="Select percentage graph.">
-					<p id="perc-name" onclick="MakeSelection('graph')">Critical Hit Chance</p>
+					<div id="selitem-graph" onclick="MakeSelection('graph')" title="Select percentage graph.">
+						<img id="perc-deco" src="./images/percdeco1.png">
+						<div id="perc-name">Critical Hit Chance</div>
+					</div>
 				</li>
 			</ul>
 		</div>
@@ -307,64 +310,48 @@ Calculations work like:<br />
 					<p class="sel-info">Select your class:<p>
 					<ul id="class-sel-list">
 						<li onclick="SelectClass('beorning')" data-classname="beorning">
-							<span>
-								<img src="./images/classes/beorning.png">
-								<p>Beorning</p>
-							</span>
+							<img src="./images/classes/beorning.png">
+							<div>Beorning</div>
+						</li>
+						<li onclick="SelectClass('brawler')" data-classname="brawler">
+							<img src="./images/classes/brawler.png">
+							<div>Brawler</div>
 						</li>
 						<li onclick="SelectClass('burglar')" data-classname="burglar">
-							<span>
-								<img src="./images/classes/burglar.png">
-								<p>Burglar</p>
-							</span>
+							<img src="./images/classes/burglar.png">
+							<div>Burglar</div>
 						</li>
 						<li onclick="SelectClass('captain')" data-classname="captain">
-							<span>
-								<img src="./images/classes/captain.png">
-								<p>Captain</p>
-							</span>
+							<img src="./images/classes/captain.png">
+							<div>Captain</div>
 						</li>
 						<li onclick="SelectClass('champion')" data-classname="champion">
-							<span>
-								<img src="./images/classes/champion.png">
-								<p>Champion</p>
-							</span>
+							<img src="./images/classes/champion.png">
+							<div>Champion</div>
 						</li>
 						<li onclick="SelectClass('guardian')" data-classname="guardian">
-							<span>
-								<img src="./images/classes/guardian.png">
-								<p>Guardian</p>
-							</span>
+							<img src="./images/classes/guardian.png">
+							<div>Guardian</div>
 						</li>
 						<li onclick="SelectClass('hunter')" data-classname="hunter">
-							<span>
-								<img src="./images/classes/hunter.png">
-								<p>Hunter</p>
-							</span>
+							<img src="./images/classes/hunter.png">
+							<div>Hunter</div>
 						</li>
 						<li onclick="SelectClass('loremaster')" data-classname="loremaster">
-							<span>
-								<img src="./images/classes/loremaster.png">
-								<p>Lore-master</p>
-							</span>
-							</li>
+							<img src="./images/classes/loremaster.png">
+							<div>Lore-master</div>
+						</li>
 						<li onclick="SelectClass('minstrel')" data-classname="minstrel">
-							<span>
-								<img src="./images/classes/minstrel.png">
-								<p>Minstrel</p>
-							</span>
+							<img src="./images/classes/minstrel.png">
+							<div>Minstrel</div>
 						</li>
 						<li onclick="SelectClass('runekeeper')" data-classname="runekeeper">
-							<span>
-								<img src="./images/classes/runekeeper.png">
-								<p>Rune-keeper</p>
-							</span>
+							<img src="./images/classes/runekeeper.png">
+							<div>Rune-keeper</div>
 						</li>
 						<li onclick="SelectClass('warden')" data-classname="warden">
-							<span>
-								<img src="./images/classes/warden.png">
-								<p>Warden</p>
-							</span>
+							<img src="./images/classes/warden.png">
+							<div>Warden</div>
 						</li>
 					</ul>
 				</div>
@@ -405,7 +392,7 @@ Calculations work like:<br />
 							<span>
 								<p>Rift T2</p>
 								<img src="./images/penslotactive.png">
-								<p>Tier 2(hidden): lvl54</p>
+								<p>Tier 2(hidden): mob level 54</p>
 							</span>
 						</li>
 						<li class="pen-sep"> </li>
@@ -413,7 +400,7 @@ Calculations work like:<br />
 							<span>
 								<p>Rift T3</p>
 								<img src="./images/penslotactive.png">
-								<p>Tier 3(hidden): lvl54</p>
+								<p>Tier 3(hidden): mob level 54</p>
 							</span>
 						</li>
 						<li class="pen-sep"> </li>
@@ -421,7 +408,7 @@ Calculations work like:<br />
 							<span>
 								<p>ToO T2</p>
 								<img src="./images/penslotactive.png">
-								<p>Tier 2(hidden): lvl78</p>
+								<p>Tier 2(hidden): mob level 78</p>
 							</span>
 						</li>
 						<li class="pen-sep"> </li>
@@ -429,7 +416,7 @@ Calculations work like:<br />
 							<span>
 								<p>Throne T2</p>
 								<img src="./images/penslotactive.png">
-								<p>Tier 2(hidden): lvl108</p>
+								<p>Tier 2(hidden): mob level 108</p>
 							</span>
 						</li>
 						<li class="pen-sep"> </li>
@@ -437,7 +424,7 @@ Calculations work like:<br />
 							<span>
 								<p>Abyss T2</p>
 								<img src="./images/penslotactive.png">
-								<p>Enhancement III: Abyss T2 lvl115</p>
+								<p>Enhancement III: mob level 115</p>
 							</span>
 						</li>
 						<li class="pen-sep"> </li>
@@ -445,7 +432,7 @@ Calculations work like:<br />
 							<span>
 								<p>Anvil T1-3</p>
 								<img src="./images/penslotactive.png">
-								<p>Enhancement III: Anvil T1-3 lvl120</p>
+								<p>Enhancement III: mob level 120</p>
 							</span>
 						</li>
 					</ul>
@@ -597,8 +584,8 @@ Calculations work like:<br />
 </main>
 <footer>
 	<div class="top-div"></div>
-	<div id="poweredbycs"><span>Powered by</span> <a href="https://www.lotrointerface.com/downloads/info1022-CalcStat.html" target="_blank">CalcStat</a> <span id="cs-version">v1.3.2f</span></div>
-	<div id="madeby"><span id="bygiseldah">v1.2 by Giseldah</span> <div id="donatebtn">
+	<div id="poweredbycs"><span>Powered by</span> <a href="https://www.lotrointerface.com/downloads/info1022-CalcStat.html" target="_blank">CalcStat</a> <span id="cs-version">v0.0.0p</span></div>
+	<div id="madeby"><span id="bygiseldah">v1.3.0b2 by Giseldah</span> <div id="donatebtn">
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick" />
 <input type="hidden" name="hosted_button_id" value="A6JQLXZ5WF9BC" />
